@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.name }}{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <span style="font-size:32px;">{{ course.emoji }}</span>
+      <h1>{{ course.name }}</h1>
+    </div>
+    <p>{{ course.get_category_display }} · {{ course.get_level_display }} · {{ course.duration_weeks }} hafta · {{ course.enrolled_count }} talaba</p>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    {% if request.user.is_admin or course.teacher == request.user %}
+    <a href="{% url 'lesson_create' course.pk %}" class="btn btn-outline">+ Dars qo'sh</a>
+    <a href="{% url 'assignment_create' course.pk %}" class="btn btn-outline">+ Vazifa</a>
+    <a href="{% url 'take_attendance' course.pk %}" class="btn btn-outline">✅ Davomat</a>
+    <a href="{% url 'course_grades' course.pk %}" class="btn btn-outline">🏆 Baholar</a>
+    <a href="{% url 'enroll_student' course.pk %}" class="btn btn-primary">+ Talaba qo'sh</a>
+    {% endif %}
+    {% if request.user.is_admin %}
+    <a href="{% url 'course_edit' course.pk %}" class="btn btn-outline">✏️ Tahrirlash</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <div class="card animate">
+      <div class="card-head"><h3>Kurs haqida</h3></div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;">{{ course.description|default:"Tavsif qo'shilmagan." }}</p>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge b-blue">{{ course.get_category_display }}</span>
+          <span class="badge b-purple">{{ course.get_level_display }}</span>
+          <span class="badge b-green">{{ course.duration_weeks }} hafta</span>
+          {% if course.is_active %}<span class="badge b-green">Faol</span>{% else %}<span class="badge b-red">Nofaol</span>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card animate animate-d1">
+      <div class="card-head"><h3>Darslar ({{ lessons.count }})</h3></div>
+      <div class="card-body-flush">
+        {% for lesson in lessons %}
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid rgba(42,52,80,.4);">
+          <div style="width:28px;height:28px;background:rgba(79,142,247,.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;">{{ forloop.counter }}</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:500;">{{ lesson.title }}</div>
+            {% if lesson.file %}<div style="font-size:11px;color:var(--text2);">📎 Fayl mavjud</div>{% endif %}
+            {% if lesson.video_url %}<div style="font-size:11px;color:var(--text2);">🎬 Video mavjud</div>{% endif %}
+          </div>
+        </div>
+        {% empty %}
+        <div class="empty"><div class="icon">📖</div><p>Hali dars qo'shilmagan</p></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card animate animate-d1">
+      <div class="card-head">
+        <h3>Talabalar ({{ students.count }})</h3>
+        {% if request.user.is_admin or course.teacher == request.user %}
+        <a href="{% url 'enroll_student' course.pk %}" class="btn btn-outline btn-sm">+ Qo'shish</a>
+        {% endif %}
+      </div>
+      <div class="card-body-flush">
+        {% for enrollment in students %}
+        <div style="display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid rgba(42,52,80,.4);">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">{{ enrollment.student.get_full_name|first|upper|default:enrollment.student.username|first|upper }}</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:500;">{{ enrollment.student.get_full_name|default:enrollment.student.username }}</div>
+            <div style="font-size:11px;color:var(--text2);">{{ enrollment.enrolled_at|date:"d M Y" }}</div>
+          </div>
+          {% if request.user.is_admin or course.teacher == request.user %}
+          <a href="{% url 'student_attendance' enrollment.student.pk %}" class="btn btn-outline btn-xs">Davomat</a>
+          {% endif %}
+        </div>
+        {% empty %}
+        <div class="empty"><div class="icon">👥</div><p>Hali talaba yo'q</p></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

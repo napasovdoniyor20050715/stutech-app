@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.name }} — Baholar{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left"><h1>{{ course.emoji }} {{ course.name }} — Baholar</h1><p>Talabalar reytingi</p></div>
+  <a href="{% url 'grades_overview' %}" class="btn btn-outline">← Orqaga</a>
+</div>
+<div class="card">
+  <div class="card-body-flush table-wrap">
+    <table>
+      <tr><th>#</th><th>Talaba</th><th>Baholar soni</th><th>O'rtacha ball</th><th>Daraja</th><th>Amal</th></tr>
+      {% for d in data %}
+      <tr>
+        <td>
+          {% if forloop.counter == 1 %}<span style="color:var(--amber);font-size:18px;">🥇</span>
+          {% elif forloop.counter == 2 %}<span style="font-size:18px;">🥈</span>
+          {% elif forloop.counter == 3 %}<span style="font-size:18px;">🥉</span>
+          {% else %}<span class="text-muted">{{ forloop.counter }}</span>{% endif %}
+        </td>
+        <td><strong>{{ d.student.get_full_name|default:d.student.username }}</strong></td>
+        <td><span class="badge b-blue">{{ d.grades.count }}</span></td>
+        <td><strong style="font-size:16px;">{{ d.avg }}</strong></td>
+        <td>
+          {% if d.avg >= 90 %}<span class="badge b-green">A — A'lo</span>
+          {% elif d.avg >= 75 %}<span class="badge b-blue">B — Yaxshi</span>
+          {% elif d.avg >= 60 %}<span class="badge b-amber">C — Qoniqarli</span>
+          {% elif d.avg > 0 %}<span class="badge b-red">D — Qoniqarsiz</span>
+          {% else %}<span class="badge b-gray">—</span>{% endif %}
+        </td>
+        <td><a href="{% url 'student_attendance' d.student.pk %}" class="btn btn-outline btn-xs">Davomat</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6"><div class="empty"><div class="icon">🏆</div><h3>Hali baho yo'q</h3></div></td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Davomat{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left"><h1>Davomat ✅</h1><p>Dars davomatini kuzatish</p></div>
+</div>
+{% if courses %}
+<div class="card" style="margin-bottom:20px;">
+  <div class="card-head"><h3>Davomat belgilash</h3></div>
+  <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap;">
+    {% for course in courses %}
+    <a href="{% url 'take_attendance' course.pk %}" class="btn btn-outline">{{ course.emoji }} {{ course.name }} — Bugungi davomat</a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+<div class="card">
+  <div class="card-head"><h3>Oxirgi sessiyalar</h3></div>
+  <div class="card-body-flush table-wrap">
+    <table>
+      <tr><th>Kurs</th><th>Sana</th><th>Mavzu</th><th>O'qituvchi</th><th>Amal</th></tr>
+      {% for session in sessions %}
+      <tr>
+        <td><span style="font-size:16px;">{{ session.course.emoji }}</span> {{ session.course.name }}</td>
+        <td><span class="badge b-blue">{{ session.date|date:"d M Y" }}</span></td>
+        <td class="text-muted text-small">{{ session.topic|default:"—" }}</td>
+        <td class="text-small">{{ session.teacher.get_full_name|default:"—" }}</td>
+        <td><a href="{% url 'take_attendance' session.course.pk %}" class="btn btn-outline btn-xs">Ko'rish</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5"><div class="empty"><div class="icon">✅</div><h3>Sessiyalar yo'q</h3></div></td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

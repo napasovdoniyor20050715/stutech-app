@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Foydalanuvchilar{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left">
+    <h1>Foydalanuvchilar 👥</h1>
+    <p>Barcha adminlar, o'qituvchilar va talabalar</p>
+  </div>
+  <a href="{% url 'user_create' %}" class="btn btn-primary">+ Yangi qo'shish</a>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="?" class="btn btn-sm {% if not role_filter %}btn-primary{% else %}btn-outline{% endif %}">Barchasi</a>
+      <a href="?role=admin" class="btn btn-sm {% if role_filter == 'admin' %}btn-primary{% else %}btn-outline{% endif %}">🛡 Admin</a>
+      <a href="?role=teacher" class="btn btn-sm {% if role_filter == 'teacher' %}btn-primary{% else %}btn-outline{% endif %}">👨‍🏫 O'qituvchi</a>
+      <a href="?role=student" class="btn btn-sm {% if role_filter == 'student' %}btn-primary{% else %}btn-outline{% endif %}">🎓 Talaba</a>
+    </div>
+    <form method="get" style="display:flex;gap:8px;">
+      {% if role_filter %}<input type="hidden" name="role" value="{{ role_filter }}">{% endif %}
+      <input type="text" name="q" value="{{ q }}" placeholder="Ism yoki username..." style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;outline:none;width:200px;">
+      <button type="submit" class="btn btn-outline btn-sm">Qidirish</button>
+    </form>
+  </div>
+  <div class="card-body-flush table-wrap">
+    <table>
+      <tr><th>#</th><th>Ism Familiya</th><th>Username</th><th>Email</th><th>Rol</th><th>Holat</th><th>Amal</th></tr>
+      {% for u in users %}
+      <tr>
+        <td class="text-muted text-small">{{ forloop.counter }}</td>
+        <td><strong>{{ u.get_full_name|default:'—' }}</strong></td>
+        <td><span class="mono text-small">{{ u.username }}</span></td>
+        <td class="text-muted text-small">{{ u.email|default:'—' }}</td>
+        <td>
+          {% if u.role == 'admin' %}<span class="badge b-purple">🛡 Admin</span>
+          {% elif u.role == 'teacher' %}<span class="badge b-blue">👨‍🏫 O'qituvchi</span>
+          {% else %}<span class="badge b-green">🎓 Talaba</span>{% endif %}
+        </td>
+        <td>{% if u.is_active %}<span class="badge b-green">Faol</span>{% else %}<span class="badge b-red">Nofaol</span>{% endif %}</td>
+        <td style="display:flex;gap:6px;">
+          <a href="{% url 'user_edit' u.pk %}" class="btn btn-outline btn-xs">✏️</a>
+          <form method="post" action="{% url 'user_delete' u.pk %}" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-xs">🗑</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text2);">Foydalanuvchilar topilmadi</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

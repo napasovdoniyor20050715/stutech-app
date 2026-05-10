@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Davomat belgilash{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left"><h1>✅ Davomat belgilash</h1><p>{{ course.emoji }} {{ course.name }} — {{ session.date|date:"d M Y" }}</p></div>
+  <a href="{% url 'attendance_list' %}" class="btn btn-outline">← Orqaga</a>
+</div>
+<div style="max-width:640px;">
+  <div class="card">
+    <div class="card-head"><h3>Talabalar ro'yxati</h3><span class="badge b-blue">{{ students.count }} talaba</span></div>
+    <form method="post">{% csrf_token %}
+      <div class="card-body-flush">
+        <table>
+          <tr><th>#</th><th>Talaba</th><th>Keldi</th><th>Kech keldi</th><th>Kelmadi</th><th>Sababli</th><th>Izoh</th></tr>
+          {% for enrollment in students %}
+          <tr>
+            <td class="text-muted text-small">{{ forloop.counter }}</td>
+            <td><strong>{{ enrollment.student.get_full_name|default:enrollment.student.username }}</strong></td>
+            {% with rec=existing|default_if_none:None %}
+            <td style="text-align:center;"><input type="radio" name="status_{{ enrollment.student.pk }}" value="present" {% if existing|default:None %}{% with r=existing %}{% if enrollment.student.pk in existing and existing|dictsort:"student_id" %}{% endif %}{% endwith %}{% endif %} checked></td>
+            <td style="text-align:center;"><input type="radio" name="status_{{ enrollment.student.pk }}" value="late"></td>
+            <td style="text-align:center;"><input type="radio" name="status_{{ enrollment.student.pk }}" value="absent"></td>
+            <td style="text-align:center;"><input type="radio" name="status_{{ enrollment.student.pk }}" value="excused"></td>
+            {% endwith %}
+            <td><input type="text" name="note_{{ enrollment.student.pk }}" placeholder="Izoh..." style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-size:12px;width:120px;outline:none;"></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text2);">Kursga hali talaba yozilmagan</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div style="padding:16px 20px;border-top:1px solid var(--border);">
+        <button type="submit" class="btn btn-primary">💾 Davomatni saqlash</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

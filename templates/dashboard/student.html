@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Talaba paneli{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="page-header animate">
+  <h1>Xush kelibsiz, {{ user.first_name|default:user.username }}! 🎓</h1>
+  <p>O'quv jarayoningizning umumiy holati</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card stat-blue animate delay-1">
+    <div class="stat-icon">📚</div>
+    <div class="stat-val">{{ my_enrollments.count }}</div>
+    <div class="stat-lbl">Kurslarim</div>
+  </div>
+  <div class="stat-card stat-amber animate delay-2">
+    <div class="stat-icon">📝</div>
+    <div class="stat-val">{{ pending_assignments.count }}</div>
+    <div class="stat-lbl">Kutilayotgan vazifalar</div>
+  </div>
+  <div class="stat-card stat-green animate delay-3">
+    <div class="stat-icon">⭐</div>
+    <div class="stat-val">{{ avg_grade }}</div>
+    <div class="stat-lbl">O'rtacha baho</div>
+  </div>
+  <div class="stat-card stat-purple animate delay-4">
+    <div class="stat-icon">📊</div>
+    <div class="stat-val">—</div>
+    <div class="stat-lbl">Davomat foizi</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div class="card animate">
+    <div class="card-header">
+      <h5><i class="bi bi-book-half"></i> Kurslarim</h5>
+      <a href="{% url 'course_list' %}" class="btn btn-outline btn-sm">+Kurs qo'shish</a>
+    </div>
+    <div class="card-body" style="padding:14px;">
+      {% for e in my_enrollments %}
+      <a href="{% url 'course_detail' e.course.pk %}" style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:8px;transition:border-color .2s;">
+        <span style="font-size:24px">{{ e.course.thumbnail_emoji }}</span>
+        <div>
+          <div style="font-size:13px;font-weight:600">{{ e.course.title }}</div>
+          <div style="font-size:11px;color:var(--text2)">{{ e.course.teacher }}</div>
+        </div>
+      </a>
+      {% empty %}
+      <div class="empty-state"><div class="icon">📚</div>Hali hech qanday kursga yozilmagansiz</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card animate">
+    <div class="card-header">
+      <h5><i class="bi bi-exclamation-circle"></i> Kutilayotgan vazifalar</h5>
+      <a href="{% url 'assignment_list' %}" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <div class="card-body" style="padding:14px;">
+      {% for a in pending_assignments %}
+      <div style="background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div style="font-size:13px;font-weight:600">{{ a.title }}</div>
+          <span class="badge badge-amber">{{ a.due_date|date:"d-M" }}</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">{{ a.course.title }}</div>
+        <a href="{% url 'submit_assignment' a.pk %}" class="btn btn-primary btn-sm" style="margin-top:8px">Topshirish</a>
+      </div>
+      {% empty %}
+      <div class="empty-state"><div class="icon">✅</div>Barcha vazifalar topshirilgan!</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

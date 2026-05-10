@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Davomatim{% endblock %}
+{% block content %}
+<div class="ph"><div class="ph-left"><h1>Davomat — {{ student.get_full_name|default:student.username }}</h1></div></div>
+<div class="stats-row">
+  <div class="stat c-blue animate"><div class="stat-lbl">Jami darslar</div><div class="stat-val">{{ total }}</div></div>
+  <div class="stat c-green animate animate-d1"><div class="stat-lbl">Keldi</div><div class="stat-val">{{ present }}</div></div>
+  <div class="stat c-amber animate animate-d2"><div class="stat-lbl">Davomat</div><div class="stat-val">{{ pct }}%</div></div>
+  <div class="stat c-red animate animate-d3" style="--red:#ef4444;"><div class="stat-lbl">Kelmadi</div><div class="stat-val">{{ total|add:"-"|add:present }}</div></div>
+</div>
+<div class="card">
+  <div class="card-body-flush table-wrap">
+    <table>
+      <tr><th>Kurs</th><th>Sana</th><th>Holat</th><th>Izoh</th></tr>
+      {% for rec in records %}
+      <tr>
+        <td><span style="font-size:16px;">{{ rec.session.course.emoji }}</span> {{ rec.session.course.name }}</td>
+        <td>{{ rec.session.date|date:"d M Y" }}</td>
+        <td>
+          {% if rec.status == 'present' %}<span class="badge b-green">✓ Keldi</span>
+          {% elif rec.status == 'late' %}<span class="badge b-amber">⏰ Kech keldi</span>
+          {% elif rec.status == 'excused' %}<span class="badge b-blue">📋 Sababli</span>
+          {% else %}<span class="badge b-red">✗ Kelmadi</span>{% endif %}
+        </td>
+        <td class="text-muted text-small">{{ rec.note|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4"><div class="empty"><div class="icon">✅</div><h3>Davomat yozuvlari yo'q</h3></div></td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

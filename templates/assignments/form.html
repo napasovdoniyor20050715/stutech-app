@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Vazifa yaratish{% endblock %}
+{% block content %}
+<div class="ph"><div class="ph-left"><h1>+ Yangi vazifa</h1><p>{{ course.emoji }} {{ course.name }}</p></div><a href="{% url 'course_detail' course.pk %}" class="btn btn-outline">← Orqaga</a></div>
+<div style="max-width:580px;"><div class="card"><div class="card-body">
+  <form method="post">{% csrf_token %}
+    <div class="form-group"><label>Vazifa nomi</label>{{ form.title }}</div>
+    <div class="form-group"><label>Tavsif / Shartlar</label>{{ form.description }}</div>
+    <div class="form-row"><div class="form-group"><label>Topshirish muddati</label>{{ form.due_date }}</div><div class="form-group"><label>Maksimal ball</label>{{ form.max_score }}</div></div>
+    <div class="form-actions"><button type="submit" class="btn btn-primary">+ Yaratish</button><a href="{% url 'course_detail' course.pk %}" class="btn btn-outline">Bekor qilish</a></div>
+  </form>
+</div></div></div>
+{% endblock %}

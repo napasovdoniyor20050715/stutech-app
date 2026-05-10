@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}O'qituvchi paneli{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="page-header animate">
+  <h1>Xush kelibsiz, {{ user.first_name|default:user.username }}! 👋</h1>
+  <p>Bugungi darslar va topshiriqlar</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card stat-blue animate delay-1">
+    <div class="stat-icon">📚</div>
+    <div class="stat-val">{{ my_courses.count }}</div>
+    <div class="stat-lbl">Mening kurslarim</div>
+  </div>
+  <div class="stat-card stat-green animate delay-2">
+    <div class="stat-icon">🎓</div>
+    <div class="stat-val">{{ my_students_count }}</div>
+    <div class="stat-lbl">Jami talabalar</div>
+  </div>
+  <div class="stat-card stat-amber animate delay-3">
+    <div class="stat-icon">📝</div>
+    <div class="stat-val">{{ pending_submissions.count }}</div>
+    <div class="stat-lbl">Tekshirish kerak</div>
+  </div>
+  <div class="stat-card stat-purple animate delay-4">
+    <div class="stat-icon">✅</div>
+    <div class="stat-val">—</div>
+    <div class="stat-lbl">Bugungi dars</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div class="card animate">
+    <div class="card-header">
+      <h5><i class="bi bi-book"></i> Kurslarim</h5>
+      <a href="{% url 'course_list' %}" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <div class="card-body" style="padding:14px;">
+      {% for course in my_courses %}
+      <a href="{% url 'course_detail' course.pk %}" style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:8px;transition:border-color .2s;">
+        <span style="font-size:26px">{{ course.thumbnail_emoji }}</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">{{ course.title }}</div>
+          <div style="font-size:11px;color:var(--text2)">{{ course.enrolled_count }} talaba · {{ course.get_level_display }}</div>
+        </div>
+        <a href="{% url 'mark_attendance' course.pk %}" class="btn btn-sm btn-success" onclick="event.stopPropagation()"><i class="bi bi-calendar-check"></i></a>
+      </a>
+      {% empty %}
+      <div class="empty-state"><div class="icon">📚</div>Kurs yo'q</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card card-table animate">
+    <div class="card-header">
+      <h5><i class="bi bi-inbox"></i> Tekshirish kutilmoqda</h5>
+      <a href="{% url 'submissions_list' %}" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <table class="st-table">
+      <thead><tr><th>Talaba</th><th>Vazifa</th><th>Amal</th></tr></thead>
+      <tbody>
+        {% for sub in pending_submissions %}
+        <tr>
+          <td>{{ sub.student.get_full_name|default:sub.student.username }}</td>
+          <td style="font-size:12px;color:var(--text2)">{{ sub.assignment.title }}</td>
+          <td><a href="{% url 'grade_submission' sub.pk %}" class="btn btn-sm btn-primary">Baho</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" style="text-align:center;color:var(--green);padding:24px"><i class="bi bi-check-circle"></i> Hammasi tekshirilgan!</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card animate">
+  <div class="card-header"><h5><i class="bi bi-lightning"></i> Tezkor harakatlar</h5></div>
+  <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap;">
+    <a href="{% url 'assignment_create' %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Vazifa berish</a>
+    <a href="{% url 'submissions_list' %}" class="btn btn-outline"><i class="bi bi-inbox"></i> Topshiriqlar</a>
+    <a href="{% url 'grades_list' %}" class="btn btn-outline"><i class="bi bi-trophy"></i> Baholar</a>
+    <a href="{% url 'attendance_list' %}" class="btn btn-outline"><i class="bi bi-calendar-check"></i> Davomat</a>
+  </div>
+</div>
+{% endblock %}

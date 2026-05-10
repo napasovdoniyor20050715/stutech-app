@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Vazifa topshirish{% endblock %}
+{% block content %}
+<div class="ph"><div class="ph-left"><h1>📤 Vazifa topshirish</h1><p>{{ assignment.course.emoji }} {{ assignment.course.name }} — {{ assignment.title }}</p></div><a href="{% url 'assignment_list' %}" class="btn btn-outline">← Orqaga</a></div>
+<div style="max-width:580px;"><div class="card"><div class="card-head"><h3>{{ assignment.title }}</h3><span class="badge b-amber">⏰ {{ assignment.due_date|date:"d M Y H:i" }}</span></div>
+<div class="card-body">
+  <div style="padding:14px;background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.15);border-radius:var(--r-sm);margin-bottom:20px;font-size:13px;color:var(--text2);line-height:1.7;">{{ assignment.description }}</div>
+  <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="form-group"><label>Javob / Izoh</label>{{ form.content }}</div>
+    <div class="form-group"><label>GitHub yoki boshqa link</label>{{ form.link }}</div>
+    <div class="form-group"><label>Fayl yuklash</label>{{ form.file }}</div>
+    <div class="form-actions"><button type="submit" class="btn btn-primary">📤 Topshirish</button><a href="{% url 'assignment_list' %}" class="btn btn-outline">Bekor qilish</a></div>
+  </form>
+</div></div></div>
+{% endblock %}

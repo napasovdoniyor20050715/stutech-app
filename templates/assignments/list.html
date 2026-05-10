@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Vazifalar{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left"><h1>Vazifalar 📝</h1><p>Barcha kurslar bo'yicha vazifalar</p></div>
+</div>
+<div class="card">
+  <div class="card-body-flush table-wrap">
+    <table>
+      <tr><th>Vazifa nomi</th><th>Kurs</th><th>Muddat</th><th>Max ball</th><th>Holat</th><th>Amal</th></tr>
+      {% for a in assignments %}
+      <tr>
+        <td><a href="{% url 'assignment_detail' a.pk %}" style="color:var(--accent);text-decoration:none;font-weight:500;">{{ a.title }}</a></td>
+        <td><span style="font-size:16px;">{{ a.course.emoji }}</span> {{ a.course.name }}</td>
+        <td>{% if a.due_date < now %}<span class="badge b-red">⏰ {{ a.due_date|date:"d M H:i" }}</span>{% else %}<span class="badge b-green">{{ a.due_date|date:"d M H:i" }}</span>{% endif %}</td>
+        <td><strong>{{ a.max_score }}</strong></td>
+        <td>
+          {% if request.user.is_student %}
+            {% if a.pk in submitted_ids %}<span class="badge b-green">✓ Topshirildi</span>
+            {% elif a.due_date < now %}<span class="badge b-red">Muddati o'tdi</span>
+            {% else %}<span class="badge b-amber">Kutilmoqda</span>{% endif %}
+          {% else %}<span class="badge b-blue">{{ a.submission_count }} topshiriq</span>{% endif %}
+        </td>
+        <td style="display:flex;gap:6px;">
+          <a href="{% url 'assignment_detail' a.pk %}" class="btn btn-outline btn-xs">Ko'rish</a>
+          {% if request.user.is_student and a.pk not in submitted_ids and a.due_date >= now %}
+          <a href="{% url 'submit_assignment' a.pk %}" class="btn btn-primary btn-xs">Topshirish</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6"><div class="empty"><div class="icon">📝</div><h3>Vazifalar yo'q</h3></div></td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

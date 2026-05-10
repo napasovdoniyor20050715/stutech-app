@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Bosh sahifa{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="page-header animate">
+  <h1>Admin Dashboard</h1>
+  <p>StuTech o'quv markazining umumiy holati</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card stat-blue animate delay-1">
+    <div class="stat-icon">👥</div>
+    <div class="stat-val">{{ total_students }}</div>
+    <div class="stat-lbl">Jami talabalar</div>
+    <div class="stat-sub">Ro'yxatdan o'tgan</div>
+  </div>
+  <div class="stat-card stat-purple animate delay-2">
+    <div class="stat-icon">👨‍🏫</div>
+    <div class="stat-val">{{ total_teachers }}</div>
+    <div class="stat-lbl">O'qituvchilar</div>
+    <div class="stat-sub">Faol o'qituvchilar</div>
+  </div>
+  <div class="stat-card stat-green animate delay-3">
+    <div class="stat-icon">📚</div>
+    <div class="stat-val">{{ total_courses }}</div>
+    <div class="stat-lbl">Faol kurslar</div>
+    <div class="stat-sub">Turli yo'nalishlar</div>
+  </div>
+  <div class="stat-card stat-amber animate delay-4">
+    <div class="stat-icon">📝</div>
+    <div class="stat-val">{{ pending_submissions }}</div>
+    <div class="stat-lbl">Tekshirish kutilmoqda</div>
+    <div class="stat-sub">Vazifa topshiriqlari</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+  <div class="card card-table animate">
+    <div class="card-header">
+      <h5><i class="bi bi-people"></i> So'nggi talabalar</h5>
+      <a href="{% url 'manage_users' %}" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <table class="st-table">
+      <thead><tr><th>#</th><th>Ism Familiya</th><th>Username</th><th>Holat</th></tr></thead>
+      <tbody>
+        {% for s in recent_students %}
+        <tr>
+          <td style="color:var(--text2)">{{ forloop.counter }}</td>
+          <td>{{ s.get_full_name|default:s.username }}</td>
+          <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">{{ s.username }}</td>
+          <td><span class="badge badge-green">Faol</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;color:var(--text2);padding:24px">Talabalar yo'q</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card animate">
+    <div class="card-header">
+      <h5><i class="bi bi-book"></i> So'nggi kurslar</h5>
+      <a href="{% url 'course_list' %}" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <div class="card-body" style="padding:14px;">
+      {% for course in recent_courses %}
+      <a href="{% url 'course_detail' course.pk %}" style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-sm);transition:background .15s;margin-bottom:6px;border:1px solid var(--border);">
+        <div style="font-size:24px;width:40px;text-align:center;">{{ course.thumbnail_emoji }}</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;">{{ course.title }}</div>
+          <div style="font-size:11px;color:var(--text2);">{{ course.enrolled_count }} talaba · {{ course.teacher }}</div>
+        </div>
+        <span class="badge badge-blue" style="margin-left:auto;">{{ course.get_level_display }}</span>
+      </a>
+      {% empty %}
+      <div class="empty-state"><div class="icon">📚</div>Kurslar mavjud emas</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="card card-table animate">
+  <div class="card-header">
+    <h5><i class="bi bi-lightning"></i> Tezkor harakatlar</h5>
+  </div>
+  <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap;">
+    <a href="{% url 'create_user' %}" class="btn btn-primary"><i class="bi bi-person-plus"></i> Foydalanuvchi qo'shish</a>
+    <a href="{% url 'course_create' %}" class="btn btn-outline"><i class="bi bi-plus-square"></i> Kurs yaratish</a>
+    <a href="{% url 'manage_users' %}" class="btn btn-outline"><i class="bi bi-people"></i> Foydalanuvchilar</a>
+    <a href="{% url 'grades_list' %}" class="btn btn-outline"><i class="bi bi-trophy"></i> Baholar</a>
+    <a href="/admin/" class="btn btn-outline"><i class="bi bi-gear"></i> Admin panel</a>
+  </div>
+</div>
+{% endblock %}

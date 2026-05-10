@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Talaba qo'shish{% endblock %}
+{% block content %}
+<div class="ph"><div class="ph-left"><h1>{{ course.name }} — Talaba qo'shish</h1></div><a href="{% url 'course_detail' course.pk %}" class="btn btn-outline">← Orqaga</a></div>
+<div style="max-width:480px;"><div class="card"><div class="card-body">
+  <form method="post">{% csrf_token %}
+    <div class="form-group"><label>Talabani tanlang</label>{{ form.student }}</div>
+    <div class="form-actions"><button type="submit" class="btn btn-primary">+ Qo'shish</button><a href="{% url 'course_detail' course.pk %}" class="btn btn-outline">Bekor qilish</a></div>
+  </form>
+</div></div></div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Baho qo'yish{% endblock %}
+{% block content %}
+<div class="ph"><div class="ph-left"><h1>🏆 Baho qo'yish</h1><p>{{ submission.student.get_full_name }} — {{ submission.assignment.title }}</p></div><a href="{% url 'assignment_detail' submission.assignment.pk %}" class="btn btn-outline">← Orqaga</a></div>
+<div style="max-width:520px;">
+  <div class="card" style="margin-bottom:14px;"><div class="card-head"><h3>Topshirilgan ish</h3></div>
+  <div class="card-body">
+    {% if submission.content %}<p style="font-size:13px;color:var(--text2);line-height:1.7;">{{ submission.content }}</p>{% endif %}
+    {% if submission.link %}<a href="{{ submission.link }}" target="_blank" class="btn btn-outline btn-sm" style="margin-top:10px;">🔗 Link</a>{% endif %}
+    {% if submission.file %}<a href="{{ submission.file.url }}" class="btn btn-outline btn-sm" style="margin-top:10px;">📎 Fayl</a>{% endif %}
+  </div></div>
+  <div class="card"><div class="card-body">
+    <form method="post">{% csrf_token %}
+      <div class="form-group"><label>Ball (max: {{ submission.assignment.max_score }})</label>{{ form.score }}</div>
+      <div class="form-group"><label>Izoh / Feedback</label>{{ form.feedback }}</div>
+      <div class="form-actions"><button type="submit" class="btn btn-primary">✅ Baho qo'yish</button></div>
+    </form>
+  </div></div>
+</div>
+{% endblock %}

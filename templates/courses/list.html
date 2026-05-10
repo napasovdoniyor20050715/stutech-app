@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Kurslar{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left"><h1>Kurslar 📚</h1><p>Barcha yo'nalishlardagi kurslar</p></div>
+  {% if request.user.is_admin or request.user.is_teacher %}
+  <a href="{% url 'course_create' %}" class="btn btn-primary">+ Yangi kurs</a>
+  {% endif %}
+</div>
+
+<!-- Filter bar -->
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <a href="?" class="btn btn-sm {% if not cat_filter %}btn-primary{% else %}btn-outline{% endif %}">Barchasi</a>
+  <a href="?cat=programming" class="btn btn-sm {% if cat_filter == 'programming' %}btn-primary{% else %}btn-outline{% endif %}">💻 Dasturlash</a>
+  <a href="?cat=design" class="btn btn-sm {% if cat_filter == 'design' %}btn-primary{% else %}btn-outline{% endif %}">🎨 Dizayn</a>
+  <a href="?cat=languages" class="btn btn-sm {% if cat_filter == 'languages' %}btn-primary{% else %}btn-outline{% endif %}">🌐 Tillar</a>
+  <a href="?cat=math" class="btn btn-sm {% if cat_filter == 'math' %}btn-primary{% else %}btn-outline{% endif %}">📐 Matematika</a>
+  <a href="?cat=science" class="btn btn-sm {% if cat_filter == 'science' %}btn-primary{% else %}btn-outline{% endif %}">🔬 Fan</a>
+  <a href="?cat=business" class="btn btn-sm {% if cat_filter == 'business' %}btn-primary{% else %}btn-outline{% endif %}">💼 Biznes</a>
+  <form method="get" style="margin-left:auto;display:flex;gap:6px;">
+    {% if cat_filter %}<input type="hidden" name="cat" value="{{ cat_filter }}">{% endif %}
+    <input type="text" name="q" value="{{ q }}" placeholder="Kurs qidirish..." style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;outline:none;">
+    <button type="submit" class="btn btn-outline btn-sm">🔍</button>
+  </form>
+</div>
+
+{% if courses %}
+<div class="course-grid">
+  {% for course in courses %}
+  <a href="{% url 'course_detail' course.pk %}" class="course-card animate" style="animation-delay:{{ forloop.counter0 }}00ms;">
+    <div class="cc-thumb" style="background:{% if course.color == 'blue' %}linear-gradient(135deg,#1e3a5f,#0d2137){% elif course.color == 'purple' %}linear-gradient(135deg,#2d1b69,#1a0f3d){% elif course.color == 'green' %}linear-gradient(135deg,#1a3a2a,#0d2018){% elif course.color == 'red' %}linear-gradient(135deg,#3a1f1a,#2a1210){% elif course.color == 'amber' %}linear-gradient(135deg,#2a2a1a,#1a1a0d){% else %}linear-gradient(135deg,#1f2d3a,#0d1a27){% endif %};">
+      <span style="font-size:36px;">{{ course.emoji }}</span>
+      {% if request.user.is_student and course.pk in enrolled_ids %}
+      <div style="position:absolute;top:8px;right:8px;background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.3);border-radius:20px;padding:2px 8px;font-size:10px;color:var(--green);font-weight:600;">✓ Yozilgan</div>
+      {% endif %}
+    </div>
+    <div class="cc-body">
+      <div class="cc-name">{{ course.name }}</div>
+      <div class="cc-meta">
+        👨‍🏫 {{ course.teacher.get_full_name|default:'O\'qituvchi belgilanmagan' }} · {{ course.enrolled_count }} talaba
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <span class="badge b-gray text-small">{{ course.get_category_display }}</span>
+        <span class="badge b-gray text-small">{{ course.get_level_display }}</span>
+        <span class="badge b-gray text-small">{{ course.duration_weeks }} hafta</span>
+      </div>
+      <div class="cc-bar"><div class="cc-fill" style="width:{{ course.enrolled_count|add:0 }}%;max-width:100%;"></div></div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty"><div class="icon">📚</div><h3>Kurslar topilmadi</h3><p>Boshqa kalit so'z bilan qidiring yoki filtrni o'zgartiring</p></div>
+{% endif %}
+{% endblock %}

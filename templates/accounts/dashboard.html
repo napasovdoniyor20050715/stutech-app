@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+{% if request.user.is_admin %}
+<!-- ADMIN DASHBOARD -->
+<div class="ph">
+  <div class="ph-left">
+    <h1>Bosh sahifa 📊</h1>
+    <p>StuTech o'quv markazi — umumiy holat</p>
+  </div>
+  <a href="{% url 'user_create' %}" class="btn btn-primary">+ Yangi foydalanuvchi</a>
+</div>
+
+<div class="stats-row">
+  <div class="stat c-blue animate">
+    <div class="stat-lbl">Jami talabalar</div>
+    <div class="stat-val">{{ total_students }}</div>
+    <div class="stat-sub">Faol o'quvchilar</div>
+  </div>
+  <div class="stat c-purple animate animate-d1">
+    <div class="stat-lbl">O'qituvchilar</div>
+    <div class="stat-val">{{ total_teachers }}</div>
+    <div class="stat-sub">Faol o'qituvchilar</div>
+  </div>
+  <div class="stat c-green animate animate-d2">
+    <div class="stat-lbl">Faol kurslar</div>
+    <div class="stat-val">{{ total_courses }}</div>
+    <div class="stat-sub">Turli yo'nalishlar</div>
+  </div>
+  <div class="stat c-amber animate animate-d3">
+    <div class="stat-lbl">Tekshirish kerak</div>
+    <div class="stat-val">{{ pending_submissions }}</div>
+    <div class="stat-sub">Vazifalar</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card animate animate-d2">
+    <div class="card-head">
+      <h3>So'nggi talabalar</h3>
+      <a href="{% url 'users_list' %}?role=student" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <div class="card-body-flush table-wrap">
+      <table>
+        <tr><th>Ism Familiya</th><th>Username</th><th>Holat</th></tr>
+        {% for s in recent_students %}
+        <tr>
+          <td><strong>{{ s.get_full_name|default:s.username }}</strong></td>
+          <td><span class="mono text-small text-muted">{{ s.username }}</span></td>
+          <td>
+            {% if s.is_active %}<span class="badge b-green">Faol</span>
+            {% else %}<span class="badge b-red">Nofaol</span>{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="text-muted" style="text-align:center;padding:24px;">Talabalar yo'q</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="card animate animate-d3">
+    <div class="card-head">
+      <h3>Kurslar holati</h3>
+      <a href="{% url 'course_list' %}" class="btn btn-outline btn-sm">Barchasi</a>
+    </div>
+    <div class="card-body-flush table-wrap">
+      <table>
+        <tr><th>Kurs</th><th>O'qituvchi</th><th>Talabalar</th></tr>
+        {% for c in recent_courses %}
+        <tr>
+          <td><a href="{% url 'course_detail' c.pk %}" style="color:var(--accent);text-decoration:none;">{{ c.emoji }} {{ c.name }}</a></td>
+          <td class="text-muted text-small">{{ c.teacher.get_full_name|default:'—' }}</td>
+          <td><span class="badge b-blue">{{ c.enrolled_count }}</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="text-muted" style="text-align:center;padding:24px;">Kurslar yo'q</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% elif request.user.is_teacher %}
+<!-- TEACHER DASHBOARD -->
+<div class="ph">
+  <div class="ph-left">
+    <h1>Xush kelibsiz, {{ request.user.get_full_name|default:request.user.username }}! 👋</h1>
+    <p>Bugungi darslar va topshiriqlar</p>
+  </div>
+  <a href="{% url 'course_create' %}" class="btn btn-primary">+ Yangi kurs</a>
+</div>
+
+<div class="stats-row">
+  <div class="stat c-blue animate"><div class="stat-lbl">Kurslarim</div><div class="stat-val">{{ my_courses.count }}</div><div class="stat-sub">Faol kurslar</div></div>
+  <div class="stat c-green animate animate-d1"><div class="stat-lbl">Talabalarim</div><div class="stat-val">{{ total_students }}</div><div class="stat-sub">Jami o'quvchilar</div></div>
+  <div class="stat c-amber animate animate-d2"><div class="stat-lbl">Tekshirish kerak</div><div class="stat-val">{{ pending_submissions }}</div><div class="stat-sub">Topshirilgan ishlar</div></div>
+  <div class="stat c-purple animate animate-d3"><div class="stat-lbl">Jami vazifalar</div><div class="stat-val">{{ total_assignments }}</div><div class="stat-sub">Barcha kurslar</div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card animate animate-d1">
+    <div class="card-head"><h3>Mening kurslarim</h3><a href="{% url 'course_list' %}" class="btn btn-outline btn-sm">Barchasi</a></div>
+    <div class="card-body-flush">
+      {% for course in my_courses %}
+      <a href="{% url 'course_detail' course.pk %}" style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid rgba(42,52,80,.4);text-decoration:none;color:inherit;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.02)'" onmouseout="this.style.background='transparent'">
+        <span style="font-size:24px;">{{ course.emoji }}</span>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">{{ course.name }}</div>
+          <div style="font-size:11px;color:var(--text2);">{{ course.enrolled_count }} talaba · {{ course.get_level_display }}</div>
+        </div>
+        <span class="badge b-blue">{{ course.enrolled_count }}</span>
+      </a>
+      {% empty %}
+      <div class="empty"><div class="icon">📚</div><p>Hali kurs yo'q</p></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card animate animate-d2">
+    <div class="card-head"><h3>So'nggi topshiriqlar</h3><a href="{% url 'assignment_list' %}" class="btn btn-outline btn-sm">Barchasi</a></div>
+    <div class="card-body-flush table-wrap">
+      <table>
+        <tr><th>Talaba</th><th>Vazifa</th><th>Baho</th></tr>
+        {% for sub in recent_submissions %}
+        <tr>
+          <td>{{ sub.student.get_full_name|default:sub.student.username }}</td>
+          <td class="text-small text-muted">{{ sub.assignment.title }}</td>
+          <td>
+            {% if sub.score %}<span class="badge b-green">{{ sub.score }}</span>
+            {% else %}<a href="{% url 'grade_submission' sub.pk %}" class="badge b-amber">Baho ber</a>{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" style="text-align:center;padding:24px;color:var(--text2);">Topshiriqlar yo'q</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<!-- STUDENT DASHBOARD -->
+<div class="ph">
+  <div class="ph-left">
+    <h1>Xush kelibsiz, {{ request.user.get_full_name|default:request.user.username }}! 🎓</h1>
+    <p>Bugungi o'quv rejasi</p>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat c-blue animate"><div class="stat-lbl">Kurslarim</div><div class="stat-val">{{ my_enrollments.count }}</div><div class="stat-sub">O'qiyotgan</div></div>
+  <div class="stat c-green animate animate-d1"><div class="stat-lbl">Davomatim</div><div class="stat-val">{{ attendance_pct }}%</div><div class="stat-sub">Bu oy</div></div>
+  <div class="stat c-amber animate animate-d2"><div class="stat-lbl">Kutilgan vazifalar</div><div class="stat-val">{{ pending_assignments }}</div><div class="stat-sub">Topshirilmagan</div></div>
+  <div class="stat c-purple animate animate-d3"><div class="stat-lbl">O'rtacha baho</div><div class="stat-val">{{ avg_grade|floatformat:0 }}</div><div class="stat-sub">Ball</div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card animate animate-d1">
+    <div class="card-head"><h3>Mening kurslarim</h3><a href="{% url 'course_list' %}" class="btn btn-outline btn-sm">Ko'proq</a></div>
+    <div class="card-body-flush">
+      {% for e in my_enrollments %}
+      <a href="{% url 'course_detail' e.course.pk %}" style="display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid rgba(42,52,80,.4);text-decoration:none;color:inherit;" onmouseover="this.style.background='rgba(255,255,255,.02)'" onmouseout="this.style.background='transparent'">
+        <span style="font-size:24px;">{{ e.course.emoji }}</span>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">{{ e.course.name }}</div>
+          <div style="font-size:11px;color:var(--text2);">{{ e.course.teacher.get_full_name|default:'O\'qituvchi' }} · {{ e.course.get_level_display }}</div>
+        </div>
+        <span style="color:var(--text3);font-size:16px;">→</span>
+      </a>
+      {% empty %}
+      <div class="empty"><div class="icon">📚</div><p>Hali kursga yozilmagansiz</p></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card animate animate-d2">
+    <div class="card-head"><h3>So'nggi baholar</h3><a href="{% url 'grades_overview' %}" class="btn btn-outline btn-sm">Barchasi</a></div>
+    <div class="card-body-flush table-wrap">
+      <table>
+        <tr><th>Kurs</th><th>Ball</th><th>Daraja</th></tr>
+        {% for g in recent_grades %}
+        <tr>
+          <td>{{ g.course.name }}</td>
+          <td><strong>{{ g.score }}</strong></td>
+          <td>
+            {% if g.letter == 'A' %}<span class="badge b-green">A</span>
+            {% elif g.letter == 'B' %}<span class="badge b-blue">B</span>
+            {% elif g.letter == 'C' %}<span class="badge b-amber">C</span>
+            {% else %}<span class="badge b-red">D</span>{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" style="text-align:center;padding:24px;color:var(--text2);">Baholar yo'q</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

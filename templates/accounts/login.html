@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StuTech — Kirish</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--card:#1a2133;
+  --border:#2a3450;--accent:#4f8ef7;--accent2:#7c3aed;
+  --green:#10b981;--red:#ef4444;--text:#e8eaf0;--text2:#8892aa;
+  --font:'Sora',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(42,52,80,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(42,52,80,.4) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+.bg-glow{position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(79,142,247,.07) 0%,transparent 70%);pointer-events:none;}
+.bg-glow2{position:fixed;bottom:10%;right:10%;width:400px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.05) 0%,transparent 70%);pointer-events:none;}
+.wrap{width:100%;max-width:420px;padding:20px;position:relative;z-index:1;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px 40px;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.logo-text{font-size:24px;font-weight:800;letter-spacing:-.8px;}
+.logo-text span{color:var(--accent);}
+.tagline{font-size:13px;color:var(--text2);margin-bottom:32px;line-height:1.6;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:7px;letter-spacing:.2px;}
+.field-wrap{position:relative;}
+.field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px 15px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:all .2s;}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.1);}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px;padding:4px;transition:color .2s;}
+.eye-btn:hover{color:var(--text);}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#3a6fd8);border:none;border-radius:9px;color:#fff;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:all .2s;margin-top:4px;}
+.btn-login:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,142,247,.35);}
+.alert{padding:11px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.card{animation:slideUp .5s ease;}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+<div class="wrap">
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">Stu<span>Tech</span></div>
+    </div>
+    <p class="tagline">O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.</p>
+
+    {% if form.errors %}
+    <div class="alert">⚠️ Login yoki parol noto'g'ri. Qayta urinib ko'ring.</div>
+    {% endif %}
+    {% for msg in messages %}
+    <div class="alert" style="{% if 'success' in msg.tags %}background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--green);{% endif %}">{{ msg }}</div>
+    {% endfor %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label>Foydalanuvchi nomi</label>
+        <input type="text" name="username" placeholder="username" autocomplete="username"/>
+      </div>
+      <div class="field">
+        <label>Parol</label>
+        <div class="field-wrap">
+          <input type="password" name="password" placeholder="••••••••" autocomplete="current-password" id="passInput"/>
+          <button type="button" class="eye-btn" onclick="togglePass()" id="eyeBtn" title="Parolni ko'rsatish">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-login">Kirish →</button>
+    </form>
+  </div>
+</div>
+<script>
+function togglePass(){
+  const inp = document.getElementById('passInput');
+  const btn = document.getElementById('eyeBtn');
+  if(inp.type === 'password'){
+    inp.type = 'text';
+    btn.textContent = '🙈';
+    btn.title = 'Parolni yashirish';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁';
+    btn.title = 'Parolni ko\'rsatish';
+  }
+}
+</script>
+</body>
+</html>

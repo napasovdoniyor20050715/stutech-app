@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}{{ assignment.title }}{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left"><h1>{{ assignment.title }}</h1><p>{{ assignment.course.emoji }} {{ assignment.course.name }}</p></div>
+  <div style="display:flex;gap:8px;">
+    <a href="{% url 'assignment_list' %}" class="btn btn-outline">← Orqaga</a>
+    {% if request.user.is_student and not submission %}<a href="{% url 'submit_assignment' assignment.pk %}" class="btn btn-primary">📤 Topshirish</a>{% endif %}
+  </div>
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card animate">
+      <div class="card-head"><h3>Vazifa</h3></div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:16px;">{{ assignment.description }}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge b-amber">⏰ {{ assignment.due_date|date:"d M Y H:i" }}</span>
+          <span class="badge b-blue">Max: {{ assignment.max_score }} ball</span>
+        </div>
+      </div>
+    </div>
+    {% if request.user.is_student and submission %}
+    <div class="card animate animate-d1">
+      <div class="card-head"><h3>Mening topshirig'im</h3><span class="badge b-green">✓ Topshirildi</span></div>
+      <div class="card-body">
+        {% if submission.content %}<p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px;">{{ submission.content }}</p>{% endif %}
+        {% if submission.link %}<a href="{{ submission.link }}" target="_blank" class="btn btn-outline btn-sm">🔗 Link</a>{% endif %}
+        {% if submission.score %}
+        <div style="margin-top:12px;padding:14px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15);border-radius:var(--r-sm);">
+          <div style="font-size:13px;font-weight:600;color:var(--green);">Baho: {{ submission.score }}/{{ assignment.max_score }} — {{ submission.grade }}</div>
+          {% if submission.feedback %}<p style="font-size:12px;color:var(--text2);margin-top:6px;">{{ submission.feedback }}</p>{% endif %}
+        </div>
+        {% else %}<div class="badge b-amber" style="margin-top:8px;">⏳ Tekshirilmoqda...</div>{% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% if submissions %}
+  <div class="card animate animate-d1">
+    <div class="card-head"><h3>Topshirilgan ishlar ({{ submissions.count }})</h3></div>
+    <div class="card-body-flush table-wrap">
+      <table>
+        <tr><th>Talaba</th><th>Vaqt</th><th>Baho</th><th>Amal</th></tr>
+        {% for sub in submissions %}
+        <tr>
+          <td>{{ sub.student.get_full_name|default:sub.student.username }}</td>
+          <td class="text-small text-muted">{{ sub.submitted_at|date:"d M H:i" }}</td>
+          <td>{% if sub.score %}<span class="badge b-green">{{ sub.score }}</span>{% else %}<span class="badge b-amber">—</span>{% endif %}</td>
+          <td><a href="{% url 'grade_submission' sub.pk %}" class="btn btn-outline btn-xs">Baho ber</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

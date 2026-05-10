@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}StuTech{% endblock %} — O'quv Markaz</title>
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--card:#1a2133;
+  --border:#2a3450;--accent:#4f8ef7;--accent2:#7c3aed;
+  --green:#10b981;--amber:#f59e0b;--red:#ef4444;--pink:#ec4899;
+  --text:#e8eaf0;--text2:#8892aa;--text3:#4a5568;
+  --font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--r-sm:8px;--r-lg:16px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:230px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s;}
+.main-area{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.page-content{padding:28px;flex:1;}
+
+/* SIDEBAR */
+.sb-brand{padding:20px 18px 14px;border-bottom:1px solid var(--border);}
+.sb-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.sb-logo-text{font-size:18px;font-weight:800;letter-spacing:-.5px;color:var(--text);}
+.sb-logo-text span{color:var(--accent);}
+.sb-user{margin-top:12px;padding:10px;background:var(--bg3);border-radius:var(--r-sm);border:1px solid var(--border);}
+.sb-user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-user-role{font-size:11px;color:var(--text2);margin-top:2px;}
+.sb-section{padding:12px 10px 4px;}
+.sb-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1.2px;text-transform:uppercase;padding:0 8px;margin-bottom:6px;}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r-sm);color:var(--text2);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:2px;transition:all .18s;position:relative;}
+.sb-link:hover{background:rgba(79,142,247,.08);color:var(--text);}
+.sb-link.active{background:rgba(79,142,247,.12);color:var(--accent);}
+.sb-link.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent);border-radius:0 3px 3px 0;}
+.sb-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+
+/* TOPBAR */
+.tb-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 12px;width:220px;}
+.tb-search input{background:none;border:none;color:var(--text);font-family:var(--font);font-size:13px;outline:none;width:100%;}
+.tb-right{display:flex;align-items:center;gap:12px;}
+.tb-date{font-size:12px;color:var(--text2);}
+.tb-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;color:#fff;}
+.tb-notif{position:relative;cursor:pointer;color:var(--text2);font-size:18px;}
+.tb-notif-dot{position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);}
+
+/* PAGE HEADER */
+.ph{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.ph-left h1{font-size:22px;font-weight:700;letter-spacing:-.5px;}
+.ph-left p{color:var(--text2);font-size:13px;margin-top:4px;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;animation:fadeUp .4s ease both;}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat.c-blue::after{background:var(--accent);}
+.stat.c-purple::after{background:var(--accent2);}
+.stat.c-green::after{background:var(--green);}
+.stat.c-amber::after{background:var(--amber);}
+.stat.c-pink::after{background:var(--pink);}
+.stat-lbl{font-size:11px;color:var(--text2);font-weight:500;letter-spacing:.3px;text-transform:uppercase;}
+.stat-val{font-size:30px;font-weight:700;letter-spacing:-1.5px;margin:6px 0 2px;}
+.stat-sub{font-size:12px;color:var(--text2);}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
+.card-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-head h3{font-size:14px;font-weight:600;}
+.card-body{padding:20px;}
+.card-body-flush{padding:0;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;padding:10px 20px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:12px 20px;font-size:13px;border-bottom:1px solid rgba(42,52,80,.4);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.015);}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-blue{background:rgba(79,142,247,.1);color:var(--accent);}
+.b-green{background:rgba(16,185,129,.12);color:var(--green);}
+.b-amber{background:rgba(245,158,11,.12);color:var(--amber);}
+.b-red{background:rgba(239,68,68,.1);color:var(--red);}
+.b-purple{background:rgba(124,58,237,.1);color:#a78bfa;}
+.b-pink{background:rgba(236,72,153,.1);color:var(--pink);}
+.b-gray{background:rgba(255,255,255,.06);color:var(--text2);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r-sm);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .18s;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#3a7bd5);color:#fff;}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text2);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);background:rgba(79,142,247,.06);}
+.btn-danger{background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);}
+.btn-danger:hover{background:rgba(239,68,68,.1);}
+.btn-sm{padding:6px 13px;font-size:12px;}
+.btn-xs{padding:4px 10px;font-size:11px;}
+
+/* FORMS */
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;letter-spacing:.2px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:10px 14px;color:var(--text);
+  font-family:var(--font);font-size:13px;outline:none;transition:border .2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-group select option{background:var(--bg2);}
+.form-group textarea{min-height:90px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-actions{display:flex;gap:10px;padding-top:8px;}
+
+/* COURSE CARDS */
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.course-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .2s,border-color .2s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+.course-card:hover{transform:translateY(-3px);border-color:rgba(79,142,247,.35);box-shadow:var(--shadow);}
+.cc-thumb{height:88px;display:flex;align-items:center;justify-content:center;font-size:34px;position:relative;}
+.cc-body{padding:14px 16px;}
+.cc-name{font-size:13px;font-weight:600;margin-bottom:3px;}
+.cc-meta{font-size:11px;color:var(--text2);margin-bottom:10px;}
+.cc-bar{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.cc-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .6s ease;}
+
+/* ALERTS */
+.alert{padding:12px 16px;border-radius:var(--r-sm);margin-bottom:16px;font-size:13px;border-left:3px solid;}
+.alert-success{background:rgba(16,185,129,.08);border-color:var(--green);color:var(--green);}
+.alert-error{background:rgba(239,68,68,.08);border-color:var(--red);color:var(--red);}
+.alert-info{background:rgba(79,142,247,.08);border-color:var(--accent);color:var(--accent);}
+.alert-warning{background:rgba(245,158,11,.08);border-color:var(--amber);color:var(--amber);}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 24px;color:var(--text2);}
+.empty .icon{font-size:42px;margin-bottom:12px;opacity:.4;}
+.empty h3{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.empty p{font-size:13px;}
+
+/* GRID UTILS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.flex-between{display:flex;align-items:center;justify-content:space-between;}
+.flex-center{display:flex;align-items:center;gap:10px;}
+.mt-0{margin-top:0!important;}
+.mb-0{margin-bottom:0!important;}
+.text-muted{color:var(--text2);}
+.text-small{font-size:12px;}
+.mono{font-family:var(--mono);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.animate{animation:fadeUp .4s ease both;}
+.animate-d1{animation-delay:.05s;}
+.animate-d2{animation-delay:.1s;}
+.animate-d3{animation-delay:.15s;}
+.animate-d4{animation-delay:.2s;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main-area{margin-left:0;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .course-grid{grid-template-columns:1fr 1fr;}
+  .grid-2{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <a href="{% url 'dashboard' %}" class="sb-logo">
+        <div class="sb-logo-icon">🎓</div>
+        <div class="sb-logo-text">Stu<span>Tech</span></div>
+      </a>
+      <div class="sb-user">
+        <div class="sb-user-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+        <div class="sb-user-role">
+          {% if request.user.role == 'admin' %}🛡 Administrator
+          {% elif request.user.role == 'teacher' %}👨‍🏫 O'qituvchi
+          {% else %}🎓 Talaba{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-label">Asosiy</div>
+      <a href="{% url 'dashboard' %}" class="sb-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <span class="sb-icon">📊</span> Dashboard
+      </a>
+      <a href="{% url 'course_list' %}" class="sb-link {% if 'course' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">📚</span> Kurslar
+      </a>
+    </div>
+
+    {% if request.user.role != 'student' %}
+    <div class="sb-section">
+      <div class="sb-label">O'qitish</div>
+      <a href="{% url 'assignment_list' %}" class="sb-link {% if 'assignment' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">📝</span> Vazifalar
+      </a>
+      <a href="{% url 'attendance_list' %}" class="sb-link {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">✅</span> Davomat
+      </a>
+      <a href="{% url 'grades_overview' %}" class="sb-link {% if 'grade' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">🏆</span> Baholar
+      </a>
+    </div>
+    {% else %}
+    <div class="sb-section">
+      <div class="sb-label">Mening</div>
+      <a href="{% url 'assignment_list' %}" class="sb-link {% if 'assignment' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">📝</span> Vazifalarim
+      </a>
+      <a href="{% url 'my_attendance' %}" class="sb-link {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">✅</span> Davomatim
+      </a>
+      <a href="{% url 'grades_overview' %}" class="sb-link {% if 'grade' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">🏆</span> Baholarim
+      </a>
+    </div>
+    {% endif %}
+
+    {% if request.user.role == 'admin' %}
+    <div class="sb-section">
+      <div class="sb-label">Boshqaruv</div>
+      <a href="{% url 'users_list' %}" class="sb-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="sb-icon">👥</span> Foydalanuvchilar
+      </a>
+
+    </div>
+    {% endif %}
+
+    <div class="sb-section" style="margin-top:auto;">
+      <a href="{% url 'profile' %}" class="sb-link"><span class="sb-icon">👤</span> Profil</a>
+      <a href="{% url 'logout' %}" class="sb-link" style="color:var(--red)"><span class="sb-icon">🚪</span> Chiqish</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;" id="menu-btn">☰</button>
+        <div class="tb-search">
+          <span style="color:var(--text2);font-size:13px;">🔍</span>
+          <input type="text" placeholder="Qidirish..." id="globalSearch">
+        </div>
+      </div>
+      <div class="tb-right">
+        <span class="tb-date" id="topbarDate"></span>
+        <a href="{% url 'notifications_list' %}" class="tb-notif" style="text-decoration:none;color:var(--text2);">
+          🔔
+          {% with count=request.user.unread_notifications %}
+          {% if count > 0 %}<div class="tb-notif-dot" style="display:flex;align-items:center;justify-content:center;width:16px;height:16px;font-size:9px;font-weight:700;color:#fff;">{{ count }}</div>{% endif %}
+          {% endwith %}
+        </a>
+        <a href="{% url 'profile' %}" class="tb-avatar">
+          {{ request.user.get_full_name|first|upper|default:request.user.username|first|upper }}
+        </a>
+      </div>
+    </header>
+
+    <main class="page-content">
+      {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags|default:'info' }}">{{ msg }}</div>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+<script>
+const days = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const months = ['Yan','Feb','Mar','Apr','May','Iyn','Iyl','Avg','Sen','Okt','Noy','Dek'];
+const now = new Date();
+document.getElementById('topbarDate').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+if(window.innerWidth <= 768){
+  document.getElementById('menu-btn').style.display = 'flex';
+}
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
