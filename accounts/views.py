@@ -4,12 +4,57 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Avg
-from .models import User, Notification
+from .models import User, Notification, LoginHistory
 from .forms import LoginForm, UserCreateForm, UserEditForm, ProfileEditForm
 from courses.models import Course, Enrollment
 from assignments.models import Assignment, Submission
 from attendance.models import AttendanceRecord
 from grades.models import Grade
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+def parse_user_agent(ua_string):
+    ua = ua_string.lower()
+    # Device
+    if any(x in ua for x in ['iphone', 'android', 'mobile', 'blackberry']):
+        device = 'mobile'
+    elif any(x in ua for x in ['ipad', 'tablet']):
+        device = 'tablet'
+    elif any(x in ua for x in ['windows', 'macintosh', 'linux', 'x11']):
+        device = 'desktop'
+    else:
+        device = 'unknown'
+    # Browser
+    if 'chrome' in ua and 'edg' not in ua:
+        browser = 'Chrome'
+    elif 'firefox' in ua:
+        browser = 'Firefox'
+    elif 'safari' in ua and 'chrome' not in ua:
+        browser = 'Safari'
+    elif 'edg' in ua:
+        browser = 'Edge'
+    elif 'opera' in ua or 'opr' in ua:
+        browser = 'Opera'
+    else:
+        browser = 'Boshqa'
+    # OS
+    if 'windows' in ua:
+        os_info = 'Windows'
+    elif 'android' in ua:
+        os_info = 'Android'
+    elif 'iphone' in ua or 'ipad' in ua:
+        os_info = 'iOS'
+    elif 'macintosh' in ua:
+        os_info = 'macOS'
+    elif 'linux' in ua:
+        os_info = 'Linux'
+    else:
+        os_info = "Noma'lum"
+    return device, browser, os_info
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -19,6 +64,18 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            # Login tarixini saqlash
+            ua_string = request.META.get('HTTP_USER_AGENT', '')
+            device, browser, os_info = parse_user_agent(ua_string)
+            LoginHistory.objects.create(
+                user=user,
+                ip_address=get_client_ip(request),
+                user_agent=ua_string[:500],
+                device_type=device,
+                browser=browser,
+                os_info=os_info,
+                is_success=True
+            )
             messages.success(request, f"Xush kelibsiz, {user.get_full_name() or user.username}!")
             return redirect('dashboard')
         else:
@@ -151,3 +208,10 @@ def notification_read(request, pk):
     if notif.link:
         return redirect(notif.link)
     return redirect('notifications_list')
+
+@login_required
+def login_history(request):
+    if not request.user.is_admin():
+        return redirect('dashboard')
+    histories = LoginHistory.objects.select_related('user').all()[:200]
+    return render(request, 'accounts/login_history.html', {'histories': histories})
