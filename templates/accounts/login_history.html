@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Kirish tarixi{% endblock %}
+{% block content %}
+<div class="ph">
+  <div class="ph-left">
+    <h1>Kirish tarixi 🔍</h1>
+    <p>Kim, qaysi qurilmadan, qachon kirgan</p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body-flush table-wrap">
+    <table>
+      <tr>
+        <th>Foydalanuvchi</th>
+        <th>Rol</th>
+        <th>Qurilma</th>
+        <th>Brauzer</th>
+        <th>OS</th>
+        <th>IP manzil</th>
+        <th>Vaqt</th>
+        <th>Holat</th>
+      </tr>
+      {% for h in histories %}
+      <tr>
+        <td><strong>{{ h.user.get_full_name|default:h.user.username }}</strong></td>
+        <td>
+          {% if h.user.role == 'admin' %}<span class="badge b-purple">🛡 Admin</span>
+          {% elif h.user.role == 'teacher' %}<span class="badge b-blue">👨‍🏫 O'qituvchi</span>
+          {% else %}<span class="badge b-green">🎓 Talaba</span>{% endif %}
+        </td>
+        <td>
+          {% if h.device_type == 'mobile' %}📱 Mobil
+          {% elif h.device_type == 'tablet' %}📟 Planshet
+          {% elif h.device_type == 'desktop' %}🖥 Kompyuter
+          {% else %}❓ Noma'lum{% endif %}
+        </td>
+        <td>{{ h.browser }}</td>
+        <td>{{ h.os_info }}</td>
+        <td><span class="mono text-small">{{ h.ip_address|default:"—" }}</span></td>
+        <td class="text-small">{{ h.login_time|date:"d M Y H:i" }}</td>
+        <td>
+          {% if h.is_success %}<span class="badge b-green">✓ Muvaffaqiyatli</span>
+          {% else %}<span class="badge b-red">✗ Muvaffaqiyatsiz</span>{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8"><div class="empty"><div class="icon">🔍</div><h3>Kirish tarixi yo'q</h3></div></td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}
