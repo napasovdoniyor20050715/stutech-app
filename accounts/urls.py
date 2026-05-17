@@ -13,4 +13,5 @@ urlpatterns = [
     path('users/<int:pk>/delete/', views.user_delete, name='user_delete'),
     path('notifications/', views.notifications_list, name='notifications_list'),
     path('notifications/<int:pk>/read/', views.notification_read, name='notification_read'),
+    path('login-history/', views.login_history, name='login_history'),
 ]
