@@ -249,6 +249,10 @@ tr:hover td{background:rgba(255,255,255,.015);}
         <span class="sb-icon">👥</span> Foydalanuvchilar
       </a>
 
+      <a href="{% url 'login_history' %}" class="sb-link {% if request.resolver_match.url_name == 'login_history' %}active{% endif %}">
+        <span class="sb-icon">🔍</span> Kirish tarixi
+      </a>
+
     </div>
     {% endif %}
 
