@@ -249,10 +249,6 @@ tr:hover td{background:rgba(255,255,255,.015);}
         <span class="sb-icon">👥</span> Foydalanuvchilar
       </a>
 
-      <a href="{% url 'login_history' %}" class="sb-link {% if request.resolver_match.url_name == 'login_history' %}active{% endif %}">
-        <span class="sb-icon">🔍</span> Kirish tarixi
-      </a>
-
     </div>
     {% endif %}
 
@@ -274,6 +270,23 @@ tr:hover td{background:rgba(255,255,255,.015);}
       </div>
       <div class="tb-right">
         <span class="tb-date" id="topbarDate"></span>
+
+        <!-- TIL TUGMASI -->
+        <form action="/i18n/set_language/" method="post" id="langForm">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <div style="display:flex;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px;">
+            <button type="submit" name="language" value="uz"
+              style="background:{% if LANGUAGE_CODE == 'uz' %}var(--accent){% else %}transparent{% endif %};color:{% if LANGUAGE_CODE == 'uz' %}#fff{% else %}var(--text2){% endif %};border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
+              🇺🇿 UZ
+            </button>
+            <button type="submit" name="language" value="en"
+              style="background:{% if LANGUAGE_CODE == 'en' %}var(--accent){% else %}transparent{% endif %};color:{% if LANGUAGE_CODE == 'en' %}#fff{% else %}var(--text2){% endif %};border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
+              🇬🇧 EN
+            </button>
+          </div>
+        </form>
+
         <a href="{% url 'notifications_list' %}" class="tb-notif" style="text-decoration:none;color:var(--text2);">
           🔔
           {% with count=request.user.unread_notifications %}
