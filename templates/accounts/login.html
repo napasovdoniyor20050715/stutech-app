@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .bg-glow{position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(79,142,247,.07) 0%,transparent 70%);pointer-events:none;}
 .bg-glow2{position:fixed;bottom:10%;right:10%;width:400px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.05) 0%,transparent 70%);pointer-events:none;}
 .wrap{width:100%;max-width:420px;padding:20px;position:relative;z-index:1;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px 40px;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px 40px;box-shadow:0 24px 80px rgba(0,0,0,.5);animation:slideUp .5s ease;}
 .logo{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
 .logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
 .logo-text{font-size:24px;font-weight:800;letter-spacing:-.8px;}
@@ -36,7 +36,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-login:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,142,247,.35);}
 .alert{padding:11px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.card{animation:slideUp .5s ease;}
 </style>
 </head>
 <body>
@@ -49,21 +48,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="logo-icon">🎓</div>
       <div class="logo-text">Stu<span>Tech</span></div>
     </div>
-    <p class="tagline">O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.</p>
+    <p class="tagline" id="tagline">O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.</p>
 
     <div class="lang-switch">
-      <form action="/i18n/set_language/" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.get_full_path }}">
-        <div class="lang-btns">
-          <button type="submit" name="language" value="uz" class="lang-btn active">🇺🇿 O'zbek</button>
-          <button type="submit" name="language" value="en" class="lang-btn">🇬🇧 English</button>
-        </div>
-      </form>
+      <div class="lang-btns">
+        <button class="lang-btn active" id="btn-uz" onclick="setLang('uz')">🇺🇿 O'zbek</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
+      </div>
     </div>
 
     {% if form.errors %}
-    <div class="alert">⚠️ Login yoki parol noto'g'ri. Qayta urinib ko'ring.</div>
+    <div class="alert"><span id="errorText">Login yoki parol noto'g'ri. Qayta urinib ko'ring.</span></div>
     {% endif %}
     {% for msg in messages %}
     <div class="alert" style="{% if 'success' in msg.tags %}background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--green);{% endif %}">{{ msg }}</div>
@@ -72,31 +67,55 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <form method="post">
       {% csrf_token %}
       <div class="field">
-        <label>Foydalanuvchi nomi</label>
+        <label id="label-username">Foydalanuvchi nomi</label>
         <input type="text" name="username" placeholder="username" autocomplete="username"/>
       </div>
       <div class="field">
-        <label>Parol</label>
+        <label id="label-password">Parol</label>
         <div class="field-wrap">
           <input type="password" name="password" placeholder="••••••••" autocomplete="current-password" id="passInput"/>
-          <button type="button" class="eye-btn" onclick="togglePass()" id="eyeBtn" title="Parolni ko'rsatish">👁</button>
+          <button type="button" class="eye-btn" onclick="togglePass()" id="eyeBtn">👁</button>
         </div>
       </div>
-      <button type="submit" class="btn-login">Kirish →</button>
+      <button type="submit" class="btn-login" id="btn-submit">Kirish →</button>
     </form>
   </div>
 </div>
 <script>
-function togglePass(){
-  const inp = document.getElementById('passInput');
-  const btn = document.getElementById('eyeBtn');
-  if(inp.type === 'password'){
-    inp.type = 'text';
-    btn.textContent = '🙈';
-  } else {
-    inp.type = 'password';
-    btn.textContent = '👁';
+const T = {
+  uz: {
+    tagline: "O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.",
+    username: "Foydalanuvchi nomi", password: "Parol",
+    submit: "Kirish →", error: "Login yoki parol noto'g'ri. Qayta urinib ko'ring."
+  },
+  en: {
+    tagline: "Learning Center Management System.<br>Enter your username and password.",
+    username: "Username", password: "Password",
+    submit: "Sign In →", error: "Incorrect username or password. Please try again."
   }
+};
+function setLang(lang) {
+  localStorage.setItem('stutech_lang', lang);
+  applyLang(lang);
+}
+function applyLang(lang) {
+  const t = T[lang] || T.uz;
+  document.getElementById('tagline').innerHTML = t.tagline;
+  document.getElementById('label-username').textContent = t.username;
+  document.getElementById('label-password').textContent = t.password;
+  document.getElementById('btn-submit').textContent = t.submit;
+  const e = document.getElementById('errorText');
+  if(e) e.textContent = t.error;
+  document.getElementById('btn-uz').classList.toggle('active', lang==='uz');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.getElementById('htmlRoot').lang = lang;
+}
+applyLang(localStorage.getItem('stutech_lang') || 'uz');
+function togglePass(){
+  const i = document.getElementById('passInput');
+  const b = document.getElementById('eyeBtn');
+  i.type = i.type==='password' ? 'text' : 'password';
+  b.textContent = i.type==='password' ? '👁' : '🙈';
 }
 </script>
 </body>

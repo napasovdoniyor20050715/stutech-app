@@ -205,56 +205,58 @@ tr:hover td{background:rgba(255,255,255,.015);}
     </div>
 
     <div class="sb-section">
-      <div class="sb-label">Asosiy</div>
+      <div class="sb-label" id="nav-section-main">Asosiy</div>
       <a href="{% url 'dashboard' %}" class="sb-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-        <span class="sb-icon">📊</span> Dashboard
+        <span class="sb-icon">📊</span> <span id="nav-dashboard">Dashboard</span>
       </a>
       <a href="{% url 'course_list' %}" class="sb-link {% if 'course' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">📚</span> Kurslar
+        <span class="sb-icon">📚</span> <span id="nav-courses">Kurslar</span>
       </a>
     </div>
 
     {% if request.user.role != 'student' %}
     <div class="sb-section">
-      <div class="sb-label">O'qitish</div>
+      <div class="sb-label" id="nav-section-teach">O'qitish</div>
       <a href="{% url 'assignment_list' %}" class="sb-link {% if 'assignment' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">📝</span> Vazifalar
+        <span class="sb-icon">📝</span> <span id="nav-assignments">Vazifalar</span>
       </a>
       <a href="{% url 'attendance_list' %}" class="sb-link {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">✅</span> Davomat
+        <span class="sb-icon">✅</span> <span id="nav-attendance">Davomat</span>
       </a>
       <a href="{% url 'grades_overview' %}" class="sb-link {% if 'grade' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">🏆</span> Baholar
+        <span class="sb-icon">🏆</span> <span id="nav-grades">Baholar</span>
       </a>
     </div>
     {% else %}
     <div class="sb-section">
-      <div class="sb-label">Mening</div>
+      <div class="sb-label" id="nav-section-my">Mening</div>
       <a href="{% url 'assignment_list' %}" class="sb-link {% if 'assignment' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">📝</span> Vazifalarim
+        <span class="sb-icon">📝</span> <span id="nav-myassignments">Vazifalarim</span>
       </a>
       <a href="{% url 'my_attendance' %}" class="sb-link {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">✅</span> Davomatim
+        <span class="sb-icon">✅</span> <span id="nav-myattendance">Davomatim</span>
       </a>
       <a href="{% url 'grades_overview' %}" class="sb-link {% if 'grade' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">🏆</span> Baholarim
+        <span class="sb-icon">🏆</span> <span id="nav-mygrades">Baholarim</span>
       </a>
     </div>
     {% endif %}
 
     {% if request.user.role == 'admin' %}
     <div class="sb-section">
-      <div class="sb-label">Boshqaruv</div>
+      <div class="sb-label" id="nav-section-manage">Boshqaruv</div>
       <a href="{% url 'users_list' %}" class="sb-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="sb-icon">👥</span> Foydalanuvchilar
+        <span class="sb-icon">👥</span> <span id="nav-users">Foydalanuvchilar</span>
       </a>
-
+      <a href="{% url 'login_history' %}" class="sb-link {% if request.resolver_match.url_name == 'login_history' %}active{% endif %}">
+        <span class="sb-icon">🔍</span> <span id="nav-loginhistory">Kirish tarixi</span>
+      </a>
     </div>
     {% endif %}
 
     <div class="sb-section" style="margin-top:auto;">
-      <a href="{% url 'profile' %}" class="sb-link"><span class="sb-icon">👤</span> Profil</a>
-      <a href="{% url 'logout' %}" class="sb-link" style="color:var(--red)"><span class="sb-icon">🚪</span> Chiqish</a>
+      <a href="{% url 'profile' %}" class="sb-link"><span class="sb-icon">👤</span> <span id="nav-profile">Profil</span></a>
+      <a href="{% url 'logout' %}" class="sb-link" style="color:var(--red)"><span class="sb-icon">🚪</span> <span id="nav-logout">Chiqish</span></a>
     </div>
   </aside>
 
@@ -271,21 +273,17 @@ tr:hover td{background:rgba(255,255,255,.015);}
       <div class="tb-right">
         <span class="tb-date" id="topbarDate"></span>
 
-        <!-- TIL TUGMASI -->
-        <form action="/i18n/set_language/" method="post" id="langForm">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}">
-          <div style="display:flex;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px;">
-            <button type="submit" name="language" value="uz"
-              style="background:{% if LANGUAGE_CODE == 'uz' %}var(--accent){% else %}transparent{% endif %};color:{% if LANGUAGE_CODE == 'uz' %}#fff{% else %}var(--text2){% endif %};border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
-              🇺🇿 UZ
-            </button>
-            <button type="submit" name="language" value="en"
-              style="background:{% if LANGUAGE_CODE == 'en' %}var(--accent){% else %}transparent{% endif %};color:{% if LANGUAGE_CODE == 'en' %}#fff{% else %}var(--text2){% endif %};border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
-              🇬🇧 EN
-            </button>
-          </div>
-        </form>
+        <!-- TIL TUGMASI - JavaScript -->
+        <div style="display:flex;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px;">
+          <button id="lang-uz" onclick="setLang('uz')"
+            style="background:var(--accent);color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
+            🇺🇿 UZ
+          </button>
+          <button id="lang-en" onclick="setLang('en')"
+            style="background:transparent;color:var(--text2);border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
+            🇬🇧 EN
+          </button>
+        </div>
 
         <a href="{% url 'notifications_list' %}" class="tb-notif" style="text-decoration:none;color:var(--text2);">
           🔔
@@ -315,6 +313,77 @@ document.getElementById('topbarDate').textContent = `${days[now.getDay()]}, ${no
 if(window.innerWidth <= 768){
   document.getElementById('menu-btn').style.display = 'flex';
 }
+
+// TIL TIZIMI
+const SIDEBAR_UZ = {
+  'nav-dashboard': 'Dashboard',
+  'nav-courses': 'Kurslar',
+  'nav-assignments': "Vazifalar",
+  'nav-attendance': 'Davomat',
+  'nav-grades': 'Baholar',
+  'nav-myassignments': 'Vazifalarim',
+  'nav-myattendance': 'Davomatim',
+  'nav-mygrades': 'Baholarim',
+  'nav-users': 'Foydalanuvchilar',
+  'nav-loginhistory': 'Kirish tarixi',
+  'nav-profile': 'Profil',
+  'nav-logout': 'Chiqish',
+  'nav-section-main': 'Asosiy',
+  'nav-section-teach': "O'qitish",
+  'nav-section-my': 'Mening',
+  'nav-section-manage': 'Boshqaruv',
+};
+const SIDEBAR_EN = {
+  'nav-dashboard': 'Dashboard',
+  'nav-courses': 'Courses',
+  'nav-assignments': 'Assignments',
+  'nav-attendance': 'Attendance',
+  'nav-grades': 'Grades',
+  'nav-myassignments': 'My Assignments',
+  'nav-myattendance': 'My Attendance',
+  'nav-mygrades': 'My Grades',
+  'nav-users': 'Users',
+  'nav-loginhistory': 'Login History',
+  'nav-profile': 'Profile',
+  'nav-logout': 'Sign Out',
+  'nav-section-main': 'Main',
+  'nav-section-teach': 'Teaching',
+  'nav-section-my': 'My',
+  'nav-section-manage': 'Management',
+};
+
+function setLang(lang) {
+  localStorage.setItem('stutech_lang', lang);
+  applyLang(lang);
+}
+
+function applyLang(lang) {
+  const T = lang === 'en' ? SIDEBAR_EN : SIDEBAR_UZ;
+  Object.keys(T).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = T[id];
+  });
+  // Tugma holati
+  const uzBtn = document.getElementById('lang-uz');
+  const enBtn = document.getElementById('lang-en');
+  if(uzBtn && enBtn) {
+    if(lang === 'en') {
+      uzBtn.style.background = 'transparent';
+      uzBtn.style.color = 'var(--text2)';
+      enBtn.style.background = 'var(--accent)';
+      enBtn.style.color = '#fff';
+    } else {
+      uzBtn.style.background = 'var(--accent)';
+      uzBtn.style.color = '#fff';
+      enBtn.style.background = 'transparent';
+      enBtn.style.color = 'var(--text2)';
+    }
+  }
+  document.documentElement.lang = lang;
+}
+
+// Saqlangan tilni yuklash
+applyLang(localStorage.getItem('stutech_lang') || 'uz');
 </script>
 {% block extra_js %}{% endblock %}
 </body>

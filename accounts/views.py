@@ -80,10 +80,7 @@ def login_view(request):
             return redirect('dashboard')
         else:
             messages.error(request, "Login yoki parol noto'g'ri!")
-    from django.utils.translation import get_language
-    lang = get_language()
-    template = 'accounts/login_en.html' if lang == 'en' else 'accounts/login.html'
-    return render(request, template, {'form': form})
+    return render(request, 'accounts/login.html', {'form': form})
 
 def logout_view(request):
     logout(request)
