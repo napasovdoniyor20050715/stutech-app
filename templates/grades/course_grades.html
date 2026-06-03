@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}{{ course.name }} — Baholar{% endblock %}
+{% block title %}{% endblock %}
 {% block content %}
 <div class="ph">
-  <div class="ph-left"><h1>{{ course.emoji }} {{ course.name }} — Baholar</h1><p>Talabalar reytingi</p></div>
-  <a href="{% url 'grades_overview' %}" class="btn btn-outline">← Orqaga</a>
+  <div class="ph-left"><h1>{{ course.emoji }} {{ course.name }} — <span data-i18n="page-title-grades">Baholar</span></h1><p data-i18n="rank">Talabalar reytingi</p></div>
+  <a href="{% url 'grades_overview' %}" class="btn btn-outline" data-i18n="btn-back">← Orqaga</a>
 </div>
 <div class="card">
   <div class="card-body-flush table-wrap">
     <table>
-      <tr><th>#</th><th>Talaba</th><th>Baholar soni</th><th>O'rtacha ball</th><th>Daraja</th><th>Amal</th></tr>
+      <tr>
+        <th data-i18n="col-num">#</th>
+        <th data-i18n="col-student">Talaba</th>
+        <th data-i18n="col-ball">Ball</th>
+        <th data-i18n="avg-grade">O'rtacha</th>
+        <th data-i18n="col-level">Daraja</th>
+        <th data-i18n="col-actions">Amal</th>
+      </tr>
       {% for d in data %}
       <tr>
         <td>
@@ -21,16 +28,16 @@
         <td><span class="badge b-blue">{{ d.grades.count }}</span></td>
         <td><strong style="font-size:16px;">{{ d.avg }}</strong></td>
         <td>
-          {% if d.avg >= 90 %}<span class="badge b-green">A — A'lo</span>
-          {% elif d.avg >= 75 %}<span class="badge b-blue">B — Yaxshi</span>
-          {% elif d.avg >= 60 %}<span class="badge b-amber">C — Qoniqarli</span>
-          {% elif d.avg > 0 %}<span class="badge b-red">D — Qoniqarsiz</span>
+          {% if d.avg >= 90 %}<span class="badge b-green" data-i18n="grade-a">A — A'lo</span>
+          {% elif d.avg >= 75 %}<span class="badge b-blue" data-i18n="grade-b">B — Yaxshi</span>
+          {% elif d.avg >= 60 %}<span class="badge b-amber" data-i18n="grade-c">C — Qoniqarli</span>
+          {% elif d.avg > 0 %}<span class="badge b-red" data-i18n="grade-d">D — Qoniqarsiz</span>
           {% else %}<span class="badge b-gray">—</span>{% endif %}
         </td>
-        <td><a href="{% url 'student_attendance' d.student.pk %}" class="btn btn-outline btn-xs">Davomat</a></td>
+        <td><a href="{% url 'student_attendance' d.student.pk %}" class="btn btn-outline btn-xs" data-i18n="page-title-attendance">Davomat</a></td>
       </tr>
       {% empty %}
-      <tr><td colspan="6"><div class="empty"><div class="icon">🏆</div><h3>Hali baho yo'q</h3></div></td></tr>
+      <tr><td colspan="6"><div class="empty"><div class="icon">🏆</div><h3 data-i18n="empty-no-data">Hali baho yo'q</h3></div></td></tr>
       {% endfor %}
     </table>
   </div>
