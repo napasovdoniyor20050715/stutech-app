@@ -12,7 +12,6 @@
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(42,52,80,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(42,52,80,.4) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
 .bg-glow{position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(79,142,247,.07) 0%,transparent 70%);pointer-events:none;}
-.bg-glow2{position:fixed;bottom:10%;right:10%;width:400px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.05) 0%,transparent 70%);pointer-events:none;}
 .wrap{width:100%;max-width:420px;padding:20px;position:relative;z-index:1;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px 40px;box-shadow:0 24px 80px rgba(0,0,0,.5);animation:slideUp .5s ease;}
 .logo{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
@@ -26,14 +25,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .lang-btn.active{background:var(--accent);color:#fff;}
 .lang-btn:not(.active){background:transparent;color:var(--text2);}
 .field{margin-bottom:16px;}
-.field label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:7px;letter-spacing:.2px;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:7px;}
 .field-wrap{position:relative;}
 .field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px 42px 12px 15px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:all .2s;}
 .field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.1);}
-.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px;padding:4px;transition:color .2s;}
-.eye-btn:hover{color:var(--text);}
-.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#3a6fd8);border:none;border-radius:9px;color:#fff;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:all .2s;margin-top:4px;}
-.btn-login:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,142,247,.35);}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px;padding:4px;}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#3a6fd8);border:none;border-radius:9px;color:#fff;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px;}
+.btn-login:hover{opacity:.9;transform:translateY(-1px);}
 .alert{padding:11px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 </style>
@@ -41,7 +39,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <body>
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
-<div class="bg-glow2"></div>
 <div class="wrap">
   <div class="card">
     <div class="logo">
@@ -49,21 +46,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="logo-text">Stu<span>Tech</span></div>
     </div>
     <p class="tagline" id="tagline">O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.</p>
-
     <div class="lang-switch">
       <div class="lang-btns">
         <button class="lang-btn active" id="btn-uz" onclick="setLang('uz')">🇺🇿 O'zbek</button>
         <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
       </div>
     </div>
-
     {% if form.errors %}
     <div class="alert"><span id="errorText">Login yoki parol noto'g'ri. Qayta urinib ko'ring.</span></div>
     {% endif %}
     {% for msg in messages %}
     <div class="alert" style="{% if 'success' in msg.tags %}background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--green);{% endif %}">{{ msg }}</div>
     {% endfor %}
-
     <form method="post">
       {% csrf_token %}
       <div class="field">
@@ -83,40 +77,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 <script>
 const T = {
-  uz: {
-    tagline: "O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.",
-    username: "Foydalanuvchi nomi", password: "Parol",
-    submit: "Kirish →", error: "Login yoki parol noto'g'ri. Qayta urinib ko'ring."
-  },
-  en: {
-    tagline: "Learning Center Management System.<br>Enter your username and password.",
-    username: "Username", password: "Password",
-    submit: "Sign In →", error: "Incorrect username or password. Please try again."
-  }
+  uz:{tagline:"O'quv markaz boshqaruv tizimi.<br>Login va parolingizni kiriting.",username:"Foydalanuvchi nomi",password:"Parol",submit:"Kirish →",error:"Login yoki parol noto'g'ri. Qayta urinib ko'ring."},
+  en:{tagline:"Learning Center Management System.<br>Enter your username and password.",username:"Username",password:"Password",submit:"Sign In →",error:"Incorrect username or password. Please try again."}
 };
-function setLang(lang) {
-  localStorage.setItem('stutech_lang', lang);
-  applyLang(lang);
+function setLang(lang){
+  localStorage.setItem('stutech_lang',lang);
+  const t=T[lang]||T.uz;
+  document.getElementById('tagline').innerHTML=t.tagline;
+  document.getElementById('label-username').textContent=t.username;
+  document.getElementById('label-password').textContent=t.password;
+  document.getElementById('btn-submit').textContent=t.submit;
+  const e=document.getElementById('errorText');if(e)e.textContent=t.error;
+  document.getElementById('btn-uz').classList.toggle('active',lang==='uz');
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+  document.getElementById('htmlRoot').lang=lang;
 }
-function applyLang(lang) {
-  const t = T[lang] || T.uz;
-  document.getElementById('tagline').innerHTML = t.tagline;
-  document.getElementById('label-username').textContent = t.username;
-  document.getElementById('label-password').textContent = t.password;
-  document.getElementById('btn-submit').textContent = t.submit;
-  const e = document.getElementById('errorText');
-  if(e) e.textContent = t.error;
-  document.getElementById('btn-uz').classList.toggle('active', lang==='uz');
-  document.getElementById('btn-en').classList.toggle('active', lang==='en');
-  document.getElementById('htmlRoot').lang = lang;
-}
-applyLang(localStorage.getItem('stutech_lang') || 'uz');
-function togglePass(){
-  const i = document.getElementById('passInput');
-  const b = document.getElementById('eyeBtn');
-  i.type = i.type==='password' ? 'text' : 'password';
-  b.textContent = i.type==='password' ? '👁' : '🙈';
-}
+setLang(localStorage.getItem('stutech_lang')||'uz');
+function togglePass(){const i=document.getElementById('passInput'),b=document.getElementById('eyeBtn');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁':'🙈';}
 </script>
 </body>
 </html>
