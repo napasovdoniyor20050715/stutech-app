@@ -1,13 +1,20 @@
 {% extends 'base.html' %}
-{% block title %}Vazifalar{% endblock %}
+{% block title %}{% endblock %}
 {% block content %}
 <div class="ph">
-  <div class="ph-left"><h1>Vazifalar 📝</h1><p>Barcha kurslar bo'yicha vazifalar</p></div>
+  <div class="ph-left"><h1>📝 <span data-i18n="page-title-assignments">Vazifalar</span></h1><p data-i18n="page-sub-assignments">Barcha kurslar bo'yicha vazifalar</p></div>
 </div>
 <div class="card">
   <div class="card-body-flush table-wrap">
     <table>
-      <tr><th>Vazifa nomi</th><th>Kurs</th><th>Muddat</th><th>Max ball</th><th>Holat</th><th>Amal</th></tr>
+      <tr>
+        <th data-i18n="col-assignment-name">Vazifa nomi</th>
+        <th data-i18n="col-course">Kurs</th>
+        <th data-i18n="col-deadline">Muddat</th>
+        <th data-i18n="col-maxscore">Max ball</th>
+        <th data-i18n="col-state">Holat</th>
+        <th data-i18n="col-actions">Amal</th>
+      </tr>
       {% for a in assignments %}
       <tr>
         <td><a href="{% url 'assignment_detail' a.pk %}" style="color:var(--accent);text-decoration:none;font-weight:500;">{{ a.title }}</a></td>
@@ -16,20 +23,20 @@
         <td><strong>{{ a.max_score }}</strong></td>
         <td>
           {% if request.user.is_student %}
-            {% if a.pk in submitted_ids %}<span class="badge b-green">✓ Topshirildi</span>
-            {% elif a.due_date < now %}<span class="badge b-red">Muddati o'tdi</span>
-            {% else %}<span class="badge b-amber">Kutilmoqda</span>{% endif %}
-          {% else %}<span class="badge b-blue">{{ a.submission_count }} topshiriq</span>{% endif %}
+            {% if a.pk in submitted_ids %}<span class="badge b-green" data-i18n="badge-submitted">✓ Topshirildi</span>
+            {% elif a.due_date < now %}<span class="badge b-red" data-i18n="badge-expired">Muddati o'tdi</span>
+            {% else %}<span class="badge b-amber" data-i18n="badge-pending">Kutilmoqda</span>{% endif %}
+          {% else %}<span class="badge b-blue">{{ a.submission_count }} <span data-i18n="badge-submitted">topshiriq</span></span>{% endif %}
         </td>
         <td style="display:flex;gap:6px;">
-          <a href="{% url 'assignment_detail' a.pk %}" class="btn btn-outline btn-xs">Ko'rish</a>
+          <a href="{% url 'assignment_detail' a.pk %}" class="btn btn-outline btn-xs" data-i18n="btn-view">Ko'rish</a>
           {% if request.user.is_student and a.pk not in submitted_ids and a.due_date >= now %}
-          <a href="{% url 'submit_assignment' a.pk %}" class="btn btn-primary btn-xs">Topshirish</a>
+          <a href="{% url 'submit_assignment' a.pk %}" class="btn btn-primary btn-xs" data-i18n="btn-submit">Topshirish</a>
           {% endif %}
         </td>
       </tr>
       {% empty %}
-      <tr><td colspan="6"><div class="empty"><div class="icon">📝</div><h3>Vazifalar yo'q</h3></div></td></tr>
+      <tr><td colspan="6"><div class="empty"><div class="icon">📝</div><h3 data-i18n="empty-no-data">Vazifalar yo'q</h3></div></td></tr>
       {% endfor %}
     </table>
   </div>
