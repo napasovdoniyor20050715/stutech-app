@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,19 +16,14 @@
   --green:#10b981;--amber:#f59e0b;--red:#ef4444;--pink:#ec4899;
   --text:#e8eaf0;--text2:#8892aa;--text3:#4a5568;
   --font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
-  --r:12px;--r-sm:8px;--r-lg:16px;
-  --shadow:0 4px 24px rgba(0,0,0,.4);
+  --r:12px;--r-sm:8px;--r-lg:16px;--shadow:0 4px 24px rgba(0,0,0,.4);
 }
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
-
-/* LAYOUT */
 .layout{display:flex;min-height:100vh;}
 .sidebar{width:230px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s;}
 .main-area{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
 .topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
 .page-content{padding:28px;flex:1;}
-
-/* SIDEBAR */
 .sb-brand{padding:20px 18px 14px;border-bottom:1px solid var(--border);}
 .sb-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
@@ -44,8 +39,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .sb-link.active{background:rgba(79,142,247,.12);color:var(--accent);}
 .sb-link.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent);border-radius:0 3px 3px 0;}
 .sb-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
-
-/* TOPBAR */
 .tb-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 12px;width:220px;}
 .tb-search input{background:none;border:none;color:var(--text);font-family:var(--font);font-size:13px;outline:none;width:100%;}
 .tb-right{display:flex;align-items:center;gap:12px;}
@@ -53,13 +46,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .tb-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;color:#fff;}
 .tb-notif{position:relative;cursor:pointer;color:var(--text2);font-size:18px;}
 .tb-notif-dot{position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);}
-
-/* PAGE HEADER */
 .ph{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .ph-left h1{font-size:22px;font-weight:700;letter-spacing:-.5px;}
 .ph-left p{color:var(--text2);font-size:13px;margin-top:4px;}
-
-/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;animation:fadeUp .4s ease both;}
 .stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
@@ -71,23 +60,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .stat-lbl{font-size:11px;color:var(--text2);font-weight:500;letter-spacing:.3px;text-transform:uppercase;}
 .stat-val{font-size:30px;font-weight:700;letter-spacing:-1.5px;margin:6px 0 2px;}
 .stat-sub{font-size:12px;color:var(--text2);}
-
-/* CARDS */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
 .card-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .card-head h3{font-size:14px;font-weight:600;}
 .card-body{padding:20px;}
 .card-body-flush{padding:0;}
-
-/* TABLE */
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
 th{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;padding:10px 20px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
 td{padding:12px 20px;font-size:13px;border-bottom:1px solid rgba(42,52,80,.4);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(255,255,255,.015);}
-
-/* BADGES */
 .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
 .b-blue{background:rgba(79,142,247,.1);color:var(--accent);}
 .b-green{background:rgba(16,185,129,.12);color:var(--green);}
@@ -96,8 +79,6 @@ tr:hover td{background:rgba(255,255,255,.015);}
 .b-purple{background:rgba(124,58,237,.1);color:#a78bfa;}
 .b-pink{background:rgba(236,72,153,.1);color:var(--pink);}
 .b-gray{background:rgba(255,255,255,.06);color:var(--text2);}
-
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r-sm);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .18s;white-space:nowrap;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#3a7bd5);color:#fff;}
 .btn-primary:hover{opacity:.88;transform:translateY(-1px);}
@@ -107,22 +88,14 @@ tr:hover td{background:rgba(255,255,255,.015);}
 .btn-danger:hover{background:rgba(239,68,68,.1);}
 .btn-sm{padding:6px 13px;font-size:12px;}
 .btn-xs{padding:4px 10px;font-size:11px;}
-
-/* FORMS */
 .form-group{margin-bottom:18px;}
 .form-group label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;letter-spacing:.2px;}
-.form-group input,.form-group select,.form-group textarea{
-  width:100%;background:var(--bg3);border:1px solid var(--border);
-  border-radius:var(--r-sm);padding:10px 14px;color:var(--text);
-  font-family:var(--font);font-size:13px;outline:none;transition:border .2s;
-}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 14px;color:var(--text);font-family:var(--font);font-size:13px;outline:none;transition:border .2s;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
 .form-group select option{background:var(--bg2);}
 .form-group textarea{min-height:90px;resize:vertical;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .form-actions{display:flex;gap:10px;padding-top:8px;}
-
-/* COURSE CARDS */
 .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .course-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .2s,border-color .2s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
 .course-card:hover{transform:translateY(-3px);border-color:rgba(79,142,247,.35);box-shadow:var(--shadow);}
@@ -132,47 +105,30 @@ tr:hover td{background:rgba(255,255,255,.015);}
 .cc-meta{font-size:11px;color:var(--text2);margin-bottom:10px;}
 .cc-bar{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
 .cc-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .6s ease;}
-
-/* ALERTS */
 .alert{padding:12px 16px;border-radius:var(--r-sm);margin-bottom:16px;font-size:13px;border-left:3px solid;}
 .alert-success{background:rgba(16,185,129,.08);border-color:var(--green);color:var(--green);}
 .alert-error{background:rgba(239,68,68,.08);border-color:var(--red);color:var(--red);}
 .alert-info{background:rgba(79,142,247,.08);border-color:var(--accent);color:var(--accent);}
 .alert-warning{background:rgba(245,158,11,.08);border-color:var(--amber);color:var(--amber);}
-
-/* EMPTY */
 .empty{text-align:center;padding:48px 24px;color:var(--text2);}
 .empty .icon{font-size:42px;margin-bottom:12px;opacity:.4;}
 .empty h3{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;}
 .empty p{font-size:13px;}
-
-/* GRID UTILS */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 .flex-between{display:flex;align-items:center;justify-content:space-between;}
-.flex-center{display:flex;align-items:center;gap:10px;}
-.mt-0{margin-top:0!important;}
-.mb-0{margin-bottom:0!important;}
 .text-muted{color:var(--text2);}
 .text-small{font-size:12px;}
 .mono{font-family:var(--mono);}
-
-/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .animate{animation:fadeUp .4s ease both;}
 .animate-d1{animation-delay:.05s;}
 .animate-d2{animation-delay:.1s;}
 .animate-d3{animation-delay:.15s;}
 .animate-d4{animation-delay:.2s;}
-
-/* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-::-webkit-scrollbar-thumb:hover{background:var(--text3);}
-
-/* RESPONSIVE */
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);}
@@ -187,7 +143,6 @@ tr:hover td{background:rgba(255,255,255,.015);}
 </head>
 <body>
 <div class="layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
       <a href="{% url 'dashboard' %}" class="sb-logo">
@@ -197,9 +152,9 @@ tr:hover td{background:rgba(255,255,255,.015);}
       <div class="sb-user">
         <div class="sb-user-name">{{ request.user.get_full_name|default:request.user.username }}</div>
         <div class="sb-user-role">
-          {% if request.user.role == 'admin' %}🛡 Administrator
-          {% elif request.user.role == 'teacher' %}👨‍🏫 O'qituvchi
-          {% else %}🎓 Talaba{% endif %}
+          {% if request.user.role == 'admin' %}🛡 <span data-i18n="role-admin">Administrator</span>
+          {% elif request.user.role == 'teacher' %}👨‍🏫 <span data-i18n="role-teacher">O'qituvchi</span>
+          {% else %}🎓 <span data-i18n="role-student">Talaba</span>{% endif %}
         </div>
       </div>
     </div>
@@ -260,43 +215,31 @@ tr:hover td{background:rgba(255,255,255,.015);}
     </div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main-area">
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:12px;">
         <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;" id="menu-btn">☰</button>
         <div class="tb-search">
           <span style="color:var(--text2);font-size:13px;">🔍</span>
-          <input type="text" placeholder="Qidirish..." id="globalSearch">
+          <input type="text" id="topbarSearch" data-i18n-placeholder="topbar-search" placeholder="Qidirish...">
         </div>
       </div>
       <div class="tb-right">
         <span class="tb-date" id="topbarDate"></span>
-
-        <!-- TIL TUGMASI - JavaScript -->
+        <!-- TIL TUGMASI -->
         <div style="display:flex;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px;">
-          <button id="lang-uz" onclick="setLang('uz')"
-            style="background:var(--accent);color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
-            🇺🇿 UZ
-          </button>
-          <button id="lang-en" onclick="setLang('en')"
-            style="background:transparent;color:var(--text2);border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">
-            🇬🇧 EN
-          </button>
+          <button id="lang-uz" onclick="setLang('uz')" style="background:var(--accent);color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">🇺🇿 UZ</button>
+          <button id="lang-en" onclick="setLang('en')" style="background:transparent;color:var(--text2);border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;">🇬🇧 EN</button>
         </div>
-
         <a href="{% url 'notifications_list' %}" class="tb-notif" style="text-decoration:none;color:var(--text2);">
           🔔
           {% with count=request.user.unread_notifications %}
           {% if count > 0 %}<div class="tb-notif-dot" style="display:flex;align-items:center;justify-content:center;width:16px;height:16px;font-size:9px;font-weight:700;color:#fff;">{{ count }}</div>{% endif %}
           {% endwith %}
         </a>
-        <a href="{% url 'profile' %}" class="tb-avatar">
-          {{ request.user.get_full_name|first|upper|default:request.user.username|first|upper }}
-        </a>
+        <a href="{% url 'profile' %}" class="tb-avatar">{{ request.user.get_full_name|first|upper|default:request.user.username|first|upper }}</a>
       </div>
     </header>
-
     <main class="page-content">
       {% for msg in messages %}
       <div class="alert alert-{{ msg.tags|default:'info' }}">{{ msg }}</div>
@@ -305,51 +248,144 @@ tr:hover td{background:rgba(255,255,255,.015);}
     </main>
   </div>
 </div>
-<script>
-const days = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
-const months = ['Yan','Feb','Mar','Apr','May','Iyn','Iyl','Avg','Sen','Okt','Noy','Dek'];
-const now = new Date();
-document.getElementById('topbarDate').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
-if(window.innerWidth <= 768){
-  document.getElementById('menu-btn').style.display = 'flex';
-}
 
-// TIL TIZIMI
-const SIDEBAR_UZ = {
-  'nav-dashboard': 'Dashboard',
-  'nav-courses': 'Kurslar',
-  'nav-assignments': "Vazifalar",
-  'nav-attendance': 'Davomat',
-  'nav-grades': 'Baholar',
-  'nav-myassignments': 'Vazifalarim',
-  'nav-myattendance': 'Davomatim',
-  'nav-mygrades': 'Baholarim',
-  'nav-users': 'Foydalanuvchilar',
-  'nav-loginhistory': 'Kirish tarixi',
-  'nav-profile': 'Profil',
-  'nav-logout': 'Chiqish',
-  'nav-section-main': 'Asosiy',
-  'nav-section-teach': "O'qitish",
-  'nav-section-my': 'Mening',
-  'nav-section-manage': 'Boshqaruv',
-};
-const SIDEBAR_EN = {
-  'nav-dashboard': 'Dashboard',
-  'nav-courses': 'Courses',
-  'nav-assignments': 'Assignments',
-  'nav-attendance': 'Attendance',
-  'nav-grades': 'Grades',
-  'nav-myassignments': 'My Assignments',
-  'nav-myattendance': 'My Attendance',
-  'nav-mygrades': 'My Grades',
-  'nav-users': 'Users',
-  'nav-loginhistory': 'Login History',
-  'nav-profile': 'Profile',
-  'nav-logout': 'Sign Out',
-  'nav-section-main': 'Main',
-  'nav-section-teach': 'Teaching',
-  'nav-section-my': 'My',
-  'nav-section-manage': 'Management',
+<script>
+// ============ TIL TIZIMI ============
+const LANG = {
+  uz: {
+    'nav-dashboard':'Dashboard','nav-courses':"Kurslar",'nav-assignments':"Vazifalar",
+    'nav-attendance':"Davomat",'nav-grades':"Baholar",'nav-myassignments':"Vazifalarim",
+    'nav-myattendance':"Davomatim",'nav-mygrades':"Baholarim",'nav-users':"Foydalanuvchilar",
+    'nav-loginhistory':"Kirish tarixi",'nav-profile':"Profil",'nav-logout':"Chiqish",
+    'nav-section-main':"ASOSIY",'nav-section-teach':"O'QITISH",'nav-section-my':"MENING",
+    'nav-section-manage':"BOSHQARUV",
+    'page-title-dashboard':"Bosh sahifa",'page-sub-dashboard':"StuTech o'quv markazi — umumiy holat",
+    'stat-students':"Jami talabalar",'stat-teachers':"O'qituvchilar",
+    'stat-courses':"Faol kurslar",'stat-check':"Tekshirish kerak",
+    'stat-sub-students':"Faol o'quvchilar",'stat-sub-teachers':"Faol o'qituvchilar",
+    'stat-sub-courses':"Turli yo'nalishlar",'stat-sub-check':"Vazifalar",
+    'recent-students':"So'nggi talabalar",'courses-status':"Kurslar holati",
+    'btn-all':"Barchasi",'col-fullname':"Ism Familiya",'col-username':"Username",
+    'col-status':"Holat",'col-course':"Kurs",'col-teacher':"O'qituvchi",
+    'col-students-count':"Talabalar",'badge-active':"Faol",'badge-inactive':"Nofaol",
+    'my-courses':"Kurslarim",'my-students':"Talabalarim",'pending-check':"Tekshirish kerak",
+    'total-assignments':"Jami vazifalar",'stat-sub-mycourses':"Faol kurslar",
+    'stat-sub-mystudents':"Jami o'quvchilar",'stat-sub-pending':"Topshirilgan ishlar",
+    'stat-sub-totalass':"Barcha kurslar",'teacher-courses':"Mening kurslarim",
+    'recent-submissions':"So'nggi topshiriqlar",'col-student':"Talaba",
+    'col-assignment':"Vazifa",'col-grade':"Baho",'col-action':"Amal",'btn-grade':"Baho ber",
+    'welcome':"Xush kelibsiz",'stat-mycourses':"Kurslarim",'stat-attendance':"Davomatim",
+    'stat-pending':"Kutilgan vazifalar",'stat-avgrade':"O'rtacha baho",
+    'stat-sub-studying':"O'qiyotgan",'stat-sub-thismonth':"Bu oy",
+    'stat-sub-notsubmitted':"Topshirilmagan",'stat-sub-score':"Ball",
+    'my-enrollments':"Mening kurslarim",'recent-grades':"So'nggi baholar",
+    'col-ball':"Ball",'col-level':"Daraja",'col-date':"Sana",'btn-more':"Ko'proq",
+    'page-title-users':"Foydalanuvchilar",'page-sub-users':"Barcha adminlar, o'qituvchilar va talabalar",
+    'btn-add-user':"+ Yangi qo'shish",'filter-all':"Barchasi",'filter-admin':"Admin",
+    'filter-teacher':"O'qituvchi",'filter-student':"Talaba",
+    'search-placeholder':"Ism yoki username...",'btn-search':"Qidirish",
+    'col-num':"#",'col-role':"Rol",'col-email':"Email",'col-actions':"Amal",
+    'role-admin':"Admin",'role-teacher':"O'qituvchi",'role-student':"Talaba",
+    'page-title-courses':"Kurslar",'page-sub-courses':"Barcha yo'nalishlardagi kurslar",
+    'btn-new-course':"+ Yangi kurs",'filter-cat-all':"Barchasi",
+    'cat-programming':"Dasturlash",'cat-design':"Dizayn",'cat-languages':"Tillar",
+    'cat-math':"Matematika",'cat-science':"Fan",'cat-business':"Biznes",
+    'enrolled-badge':"Yozilgan",'no-teacher':"O'qituvchi belgilanmagan",
+    'page-title-assignments':"Vazifalar",'page-sub-assignments':"Barcha kurslar bo'yicha vazifalar",
+    'col-assignment-name':"Vazifa nomi",'col-deadline':"Muddat",'col-maxscore':"Max ball",
+    'col-state':"Holat",'badge-submitted':"✓ Topshirildi",'badge-expired':"Muddati o'tdi",
+    'badge-pending':"Kutilmoqda",'btn-submit':"Topshirish",'btn-view':"Ko'rish",
+    'page-title-attendance':"Davomat",'page-sub-attendance':"Dars davomatini kuzatish",
+    'attendance-mark':"Davomat belgilash",'col-sessions':"Oxirgi sessiyalar",
+    'col-topic':"Mavzu",'att-present':"✓ Keldi",'att-absent':"✗ Kelmadi",
+    'att-late':"⏰ Kech keldi",'att-excused':"📋 Sababli",
+    'page-title-grades':"Baholar",'page-sub-grades':"Kurs tanlang",
+    'grade-a':"A — A'lo",'grade-b':"B — Yaxshi",'grade-c':"C — Qoniqarli",'grade-d':"D — Qoniqarsiz",
+    'avg-grade':"O'rtacha ball",'rank':"Reyting",
+    'page-title-history':"Kirish tarixi",'page-sub-history':"Kim, qaysi qurilmadan, qachon kirgan",
+    'col-user':"Foydalanuvchi",'col-device':"Qurilma",'col-browser':"Brauzer",
+    'col-os':"OS",'col-ip':"IP manzil",'col-time':"Vaqt",'col-result':"Holat",
+    'device-mobile':"📱 Mobil",'device-tablet':"📟 Planshet",'device-desktop':"🖥 Kompyuter",
+    'device-unknown':"❓ Noma'lum",'success-login':"✓ Muvaffaqiyatli",'failed-login':"✗ Muvaffaqiyatsiz",
+    'page-title-profile':"Mening profilim",'page-sub-profile':"Shaxsiy ma'lumotlar va parol",
+    'field-firstname':"Ism",'field-lastname':"Familiya",'field-email':"Email",
+    'field-phone':"Telefon",'field-bio':"O'zim haqimda",'field-photo':"Rasm",
+    'section-password':"Parolni o'zgartirish",'field-newpass':"Yangi parol",
+    'field-confirm':"Tasdiqlang",'pass-hint':"Bo'sh qoldirsangiz parol o'zgarmaydi",
+    'btn-save':"💾 Saqlash",'btn-back':"← Orqaga",'btn-cancel':"Bekor qilish",
+    'btn-delete':"O'chirish",'btn-edit':"Tahrirlash",'btn-create':"Yaratish",
+    'empty-no-data':"Ma'lumot yo'q",'btn-add-lesson':"+ Dars qo'sh",
+    'btn-add-assignment':"+ Vazifa",'btn-take-attendance':"✅ Davomat",
+    'btn-view-grades':"🏆 Baholar",'btn-add-student':"+ Talaba qo'sh",
+    'topbar-search':"Qidirish...",'nav-notifications':"Bildirishnomalar",
+  },
+  en: {
+    'nav-dashboard':'Dashboard','nav-courses':'Courses','nav-assignments':'Assignments',
+    'nav-attendance':'Attendance','nav-grades':'Grades','nav-myassignments':'My Assignments',
+    'nav-myattendance':'My Attendance','nav-mygrades':'My Grades','nav-users':'Users',
+    'nav-loginhistory':'Login History','nav-profile':'Profile','nav-logout':'Sign Out',
+    'nav-section-main':'MAIN','nav-section-teach':'TEACHING','nav-section-my':'MY',
+    'nav-section-manage':'MANAGEMENT',
+    'page-title-dashboard':'Dashboard','page-sub-dashboard':'StuTech Learning Center — Overview',
+    'stat-students':'Total Students','stat-teachers':'Teachers',
+    'stat-courses':'Active Courses','stat-check':'Needs Review',
+    'stat-sub-students':'Active learners','stat-sub-teachers':'Active teachers',
+    'stat-sub-courses':'Various fields','stat-sub-check':'Assignments',
+    'recent-students':'Recent Students','courses-status':'Courses Status',
+    'btn-all':'All','col-fullname':'Full Name','col-username':'Username',
+    'col-status':'Status','col-course':'Course','col-teacher':'Teacher',
+    'col-students-count':'Students','badge-active':'Active','badge-inactive':'Inactive',
+    'my-courses':'My Courses','my-students':'My Students','pending-check':'Needs Review',
+    'total-assignments':'Total Assignments','stat-sub-mycourses':'Active courses',
+    'stat-sub-mystudents':'Total learners','stat-sub-pending':'Submitted works',
+    'stat-sub-totalass':'All courses','teacher-courses':'My Courses',
+    'recent-submissions':'Recent Submissions','col-student':'Student',
+    'col-assignment':'Assignment','col-grade':'Grade','col-action':'Action','btn-grade':'Grade',
+    'welcome':'Welcome','stat-mycourses':'My Courses','stat-attendance':'Attendance',
+    'stat-pending':'Pending Tasks','stat-avgrade':'Average Grade',
+    'stat-sub-studying':'Enrolled','stat-sub-thismonth':'This month',
+    'stat-sub-notsubmitted':'Not submitted','stat-sub-score':'Score',
+    'my-enrollments':'My Courses','recent-grades':'Recent Grades',
+    'col-ball':'Score','col-level':'Level','col-date':'Date','btn-more':'View all',
+    'page-title-users':'Users','page-sub-users':'All admins, teachers and students',
+    'btn-add-user':'+ Add New','filter-all':'All','filter-admin':'Admin',
+    'filter-teacher':'Teacher','filter-student':'Student',
+    'search-placeholder':'Name or username...','btn-search':'Search',
+    'col-num':'#','col-role':'Role','col-email':'Email','col-actions':'Actions',
+    'role-admin':'Admin','role-teacher':'Teacher','role-student':'Student',
+    'page-title-courses':'Courses','page-sub-courses':'Courses in all fields',
+    'btn-new-course':'+ New Course','filter-cat-all':'All',
+    'cat-programming':'Programming','cat-design':'Design','cat-languages':'Languages',
+    'cat-math':'Mathematics','cat-science':'Science','cat-business':'Business',
+    'enrolled-badge':'Enrolled','no-teacher':'No teacher assigned',
+    'page-title-assignments':'Assignments','page-sub-assignments':'Assignments across all courses',
+    'col-assignment-name':'Assignment','col-deadline':'Due Date','col-maxscore':'Max Score',
+    'col-state':'Status','badge-submitted':'✓ Submitted','badge-expired':'Expired',
+    'badge-pending':'Pending','btn-submit':'Submit','btn-view':'View',
+    'page-title-attendance':'Attendance','page-sub-attendance':'Track class attendance',
+    'attendance-mark':'Mark Attendance','col-sessions':'Recent Sessions',
+    'col-topic':'Topic','att-present':'✓ Present','att-absent':'✗ Absent',
+    'att-late':'⏰ Late','att-excused':'📋 Excused',
+    'page-title-grades':'Grades','page-sub-grades':'Select a course',
+    'grade-a':'A — Excellent','grade-b':'B — Good','grade-c':'C — Satisfactory','grade-d':'D — Unsatisfactory',
+    'avg-grade':'Average Score','rank':'Ranking',
+    'page-title-history':'Login History','page-sub-history':'Who logged in, from which device, when',
+    'col-user':'User','col-device':'Device','col-browser':'Browser',
+    'col-os':'OS','col-ip':'IP Address','col-time':'Time','col-result':'Status',
+    'device-mobile':'📱 Mobile','device-tablet':'📟 Tablet','device-desktop':'🖥 Desktop',
+    'device-unknown':'❓ Unknown','success-login':'✓ Successful','failed-login':'✗ Failed',
+    'page-title-profile':'My Profile','page-sub-profile':'Personal information and password',
+    'field-firstname':'First Name','field-lastname':'Last Name','field-email':'Email',
+    'field-phone':'Phone','field-bio':'About Me','field-photo':'Photo',
+    'section-password':'Change Password','field-newpass':'New Password',
+    'field-confirm':'Confirm Password','pass-hint':'Leave empty to keep current password',
+    'btn-save':'💾 Save','btn-back':'← Back','btn-cancel':'Cancel',
+    'btn-delete':'Delete','btn-edit':'Edit','btn-create':'Create',
+    'empty-no-data':'No data found','btn-add-lesson':'+ Add Lesson',
+    'btn-add-assignment':'+ Assignment','btn-take-attendance':'✅ Attendance',
+    'btn-view-grades':'🏆 Grades','btn-add-student':'+ Add Student',
+    'topbar-search':'Search...','nav-notifications':'Notifications',
+  }
 };
 
 function setLang(lang) {
@@ -358,32 +394,51 @@ function setLang(lang) {
 }
 
 function applyLang(lang) {
-  const T = lang === 'en' ? SIDEBAR_EN : SIDEBAR_UZ;
-  Object.keys(T).forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = T[id];
+  const T = LANG[lang] || LANG.uz;
+  // data-i18n orqali
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(T[key]) el.textContent = T[key];
   });
-  // Tugma holati
+  // id orqali
+  Object.keys(T).forEach(key => {
+    const el = document.getElementById(key);
+    if(el) el.textContent = T[key];
+  });
+  // placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(T[key]) el.placeholder = T[key];
+  });
+  // Tugmalar
   const uzBtn = document.getElementById('lang-uz');
   const enBtn = document.getElementById('lang-en');
   if(uzBtn && enBtn) {
-    if(lang === 'en') {
-      uzBtn.style.background = 'transparent';
-      uzBtn.style.color = 'var(--text2)';
-      enBtn.style.background = 'var(--accent)';
-      enBtn.style.color = '#fff';
-    } else {
-      uzBtn.style.background = 'var(--accent)';
-      uzBtn.style.color = '#fff';
-      enBtn.style.background = 'transparent';
-      enBtn.style.color = 'var(--text2)';
-    }
+    uzBtn.style.background = lang==='uz' ? 'var(--accent)' : 'transparent';
+    uzBtn.style.color = lang==='uz' ? '#fff' : 'var(--text2)';
+    enBtn.style.background = lang==='en' ? 'var(--accent)' : 'transparent';
+    enBtn.style.color = lang==='en' ? '#fff' : 'var(--text2)';
   }
-  document.documentElement.lang = lang;
+  document.getElementById('htmlRoot').lang = lang;
 }
 
-// Saqlangan tilni yuklash
-applyLang(localStorage.getItem('stutech_lang') || 'uz');
+// Sana
+const days_uz = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const days_en = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months_uz = ['Yan','Feb','Mar','Apr','May','Iyn','Iyl','Avg','Sen','Okt','Noy','Dek'];
+const months_en = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const now = new Date();
+const lang = localStorage.getItem('stutech_lang') || 'uz';
+if(lang === 'en') {
+  document.getElementById('topbarDate').textContent = `${days_en[now.getDay()]}, ${now.getDate()} ${months_en[now.getMonth()]}`;
+} else {
+  document.getElementById('topbarDate').textContent = `${days_uz[now.getDay()]}, ${now.getDate()} ${months_uz[now.getMonth()]}`;
+}
+
+if(window.innerWidth <= 768) document.getElementById('menu-btn').style.display = 'flex';
+
+// Tilni qo'llash
+applyLang(lang);
 </script>
 {% block extra_js %}{% endblock %}
 </body>
